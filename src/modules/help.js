@@ -10,9 +10,16 @@ module.exports = (client, msg, content, permissions) =>{
         color: 0xa8a80d,
         thumbnail:{
             url: client.user.avatarURL(),
-        },fields:[{
+        },fields:
+        [{
             name: "Search",
             value: `description: returns an Information about the founded user \nSyntax: ${config.prefix}search <name>/<user id>`,
+        },{
+            name: "Meme",
+            value: `description: sends an random Meme \nSyntax: ${config.prefix}meme`,
+        },{
+            name: "Lyric",
+            value: `description: sends the Lyric´s of an speicified Song \nSyntax: ${config.prefix}lyric <song title>`, 
         }]
     }});
 

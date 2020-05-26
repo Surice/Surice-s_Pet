@@ -115,4 +115,14 @@ function authorized(msg){
 }
 
 
-client.login(config.token);
+try{
+    client.login(config.token)
+}catch(err){
+    console.log(err);
+    if(err.code == 'EAI_AGAIN' || err.code == 'ETIMEDOUT'){
+        console.log(`------------------------\n>CONNECTION ERROR DETECTED<\n------------------------`);
+        setTimeout(function(){
+            client.login(config.token)
+        }, 30000);
+    }
+}
