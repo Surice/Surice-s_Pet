@@ -113,22 +113,21 @@ client.on('message', (msg)=>{
 //checks the access permission of the user
 function authorized(msg){
     var response = new Array();
-
     
-    if(msg.author.id == config.owner || users.includes(msg.author.id)){
+    if(msg.author.id == config.owner || msg.author.id == config.owner2 || users.includes(msg.author.id)){
         response.push("owner");
         response.push("admin");
         response.push("everyone");
-    } 
+    }
     //DOESNT WORK RIGHT NOW! need an if clause for "user has role bot-command and check if the role has admin rights"
-    else if(msg.author){
+    else if(msg.member.hasPermission('ADMINISTRATOR')){
         response.push("admin");
         response.push("everyone");
     }
     else if(channels.includes(msg.channel.id)){
         response.push("everyone");
     }
-
+    console.log(response);
     return response;
 }
 

@@ -4,7 +4,6 @@ module.exports = async (client, msg, content) => {
     let channels = JSON.parse(fs.readFileSync(`${__dirname}/../stor/channels.json`).toString());
     let users = JSON.parse(fs.readFileSync(`${__dirname}/../stor/users.json`).toString());
 
-    if(users.includes(msg.author.id)){
         if(content[2] && content[2].startsWith("<#")){
             var temp = content[2].substr(2).slice(0, -1);
             content[2] = temp;
@@ -34,7 +33,4 @@ module.exports = async (client, msg, content) => {
                 fields:[{name: "\u200b", value: output,},]}
             });
         }
-    }else{
-        msg.channel.send("you are not authorized to use admin commands");
-    }
 }
