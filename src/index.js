@@ -115,12 +115,13 @@ function authorized(msg){
     var response = new Array();
 
     
-    if(msg.author.id == config.owner){
+    if(msg.author.id == config.owner || users.includes(msg.author.id)){
         response.push("owner");
         response.push("admin");
         response.push("everyone");
     } 
-    else if(users.includes(msg.author.id)){
+    //DOESNT WORK RIGHT NOW! need an if clause for "user has role bot-command and check if the role has admin rights"
+    else if(msg.author){
         response.push("admin");
         response.push("everyone");
     }

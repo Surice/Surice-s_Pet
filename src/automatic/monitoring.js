@@ -14,7 +14,7 @@ module.exports = async (client, fs, cron, mail, mailOptions)=> {
             console.log(user2.presence.clientStatus);
 
             mailOptions.subject = "Your Discord Assistent may Went Offline!";
-            mailOptions.text =`the monitoring system has reported an error. you should check the server status. \nno further errors information \n\n\non behalf of sebastian ulrich \n\nthis is a machine generated letter. an answer to this email cannot be handled. in case of problems or questions please write to info@sebastian-web.de`;
+            mailOptions.text =`the monitoring system has reported an error. you should check the server status. \nno further error informations \n\n\non behalf of sebastian ulrich \n\nthis is a machine generated letter. an answer to this email cannot be handled. in case of problems or questions please write to info@sebastian-web.de`;
             mail.sendMail(mailOptions);
         }else{
             offMsgSend = true;
