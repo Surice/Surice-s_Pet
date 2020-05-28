@@ -29,10 +29,16 @@ module.exports = (client, msg, content, permissions) =>{
             description: " ",
             color: 0xc76f12,
             fields:[{
-                name: "User",
-                value: `description: add/remove a user as bot Admin \nSyntax: ${config.prefix}user add/remove <@username>`,
+                name: "Kick",
+                value: `description: kick´s an Player from current Server \nSyntax: ${config.prefix}kick <@user>/<user id>`,
             },{
-                name: "channel",
+                name: "Ban",
+                value: `description: Ban´s an Player from current Server \nSyntax: ${config.prefix}ban <@user>/<user id>`,
+            },{
+                name: "Purge",
+                value: `description: purges a specific amount of messages \nSyntax: ${config.prefix}purge <mount of messages>`,
+            },{
+                name: "Channel",
                 value: `description: add/remove a channel as bot command channel \nSyntax: ${config.prefix}channel add/remove <#channel id>`,
             }]
         }});
@@ -51,6 +57,9 @@ module.exports = (client, msg, content, permissions) =>{
             },{
                 name: "say",
                 value: `description: the bot will say whatever you want and if you want as embed too \nSyntax: ${config.prefix}say <channelid> [embed(opt)] content`,
+            },{
+                name: "User",
+                value: `description: add/remove a user as bot Admin \nSyntax: ${config.prefix}user add/remove <@username>`,
             },{
                 name: "Test",
                 value: `description: the test command. depending on what you're about to test. \nSyntax: ${config.prefix}test ...(undefined)`,

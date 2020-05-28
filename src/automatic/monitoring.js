@@ -16,7 +16,8 @@ module.exports = async (client, fs, cron, mail, mailOptions)=> {
             mailOptions.subject = "Your Discord Assistent may Went Offline!";
             mailOptions.text =`the monitoring system has reported an error. you should check the server status. \nno further error informations \n\n\non behalf of sebastian ulrich \n\nthis is a machine generated letter. an answer to this email cannot be handled. in case of problems or questions please write to info@sebastian-web.de`;
             mail.sendMail(mailOptions);
-        }else{
+        }
+        else if(!offMsgSend && user1.presence.clientStatus.web == "online" && user2.presence.clientStatus.web == "online"){
             offMsgSend = true;
         }
     });
