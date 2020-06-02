@@ -1,6 +1,15 @@
 module.exports = async (client, msg, content) => {
     const fs = require("fs");
 
+    var errContent = String;
+
+    var embed = new Discord.MessageEmbed()
+        .setTitle("Muted")
+        .setThumbnail(msg.guild.iconURL)
+        .setAuthor(`${msg.author.tag}`, msg.author.avatarURL())
+        .setFooter(muteMember.id, client.user.avatarURL())
+        .setTimestamp(new Date());
+
     //import the Channel Object from storage
     let channels = JSON.parse(fs.readFileSync(`${__dirname}/../stor/channels.json`).toString());
 
@@ -21,10 +30,11 @@ module.exports = async (client, msg, content) => {
             channels[server].push(content[2]);
 
             fs.writeFileSync(`${__dirname}/../stor/channels.json`, JSON.stringify(channels));
-            msg.channel.send("Successfully Added");
-            console.log("New control channels: " + channels);
+            embed.setColor(0x34ad4c)
+            embed.setDescription(`Succesfully added <#${content[2]}> to Bot-Channel´s`);
         } else {
-            msg.channel.send("already added");
+            errContent = "already added";
+            error();
         }
     }
 
@@ -36,9 +46,9 @@ module.exports = async (client, msg, content) => {
 
             fs.writeFileSync(`${__dirname}/../stor/channels.json`, JSON.stringify(channels));
             msg.channel.send("Successfully Removed");
-            console.log("New Channels: " + channels);
         }else{
-            msg.channel.send("channel not found");
+            errContent = "channel not found";
+            error();
         }
     }
 
@@ -56,4 +66,12 @@ module.exports = async (client, msg, content) => {
             }
         });
     }
+
+    function error (){
+        embed.setColor('0xd42828')
+        embed.setDescription(`Error during editing of <#${content[2]}> to the Bot-Channel´s`)
+        embed.addField("Error", errContent);
+
+        msg.channel.send(embed);
+    } 
 }

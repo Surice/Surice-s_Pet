@@ -14,8 +14,7 @@ var global = require(`${__dirname}/global.js`);
 
 var client = new Discord.Client(),
     myuser = global.myuser,
-    unick = global.unick,
-    save = new Array();
+    unick = global.unick;
 
 var mail = nodemailer.createTransport({
     host: 'smtp.strato.de',
@@ -137,7 +136,6 @@ function authorized(msg){
     else if(channels[server].includes(msg.channel.id)){
         response.push("everyone");
     }
-    console.log(response);
     return response;
 }
 

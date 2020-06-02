@@ -35,6 +35,9 @@ module.exports = (client, msg, content, permissions) =>{
                 name: "Ban",
                 value: `description: Ban´s an Player from current Server \nSyntax: ${config.prefix}ban <@user>/<user id>`,
             },{
+                name: "Mute",
+                value: `description: add the Muted role to an Player \nSyntax: ${config.prefix}mute <@user>/<user id> (duration[s, m,h,d])`,
+            },{
                 name: "Purge",
                 value: `description: purges a specific amount of messages \nSyntax: ${config.prefix}purge <mount of messages>`,
             },{
