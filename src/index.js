@@ -7,6 +7,8 @@ const config = JSON.parse(fs.readFileSync(`${__dirname}/config.json`,'utf-8'));
 
 var users = JSON.parse(fs.readFileSync(`${__dirname}/stor/users.json`).toString());
 var channels = JSON.parse(fs.readFileSync(`${__dirname}/stor/channels.json`).toString());
+let mutes = JSON.parse(fs.readFileSync(`${__dirname}/stor/muteUsers.json`).toString());
+
 
 var global = require(`${__dirname}/global.js`);
 
@@ -48,6 +50,13 @@ client.on('guildMemberUpdate', function (guild, oldguild){
     if(guild.user.id == myuser && oldguild.nickname != unick){
        setnick(guild);
     }else{
+    }
+});
+client.on('guildMemberAdd', member => {
+    const server = member.guild;
+    if(mutes[server] && mutes[server].includes(member.id)){
+        let role = server.roles.cache.find(e => e.name == config.muteRoleName);
+        member.roles.add(role);
     }
 });
 
@@ -112,7 +121,8 @@ client.on('message', (msg)=>{
 
 //checks the access permission of the user
 function authorized(msg){
-    var response = new Array();
+    var response = new Array(),
+        server = msg.guild.name;
     
     if(msg.author.id == config.owner || msg.author.id == config.owner2 || users.includes(msg.author.id)){
         response.push("owner");
@@ -124,7 +134,7 @@ function authorized(msg){
         response.push("admin");
         response.push("everyone");
     }
-    else if(channels.includes(msg.channel.id)){
+    else if(channels[server].includes(msg.channel.id)){
         response.push("everyone");
     }
     console.log(response);

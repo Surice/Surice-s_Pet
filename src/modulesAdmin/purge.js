@@ -12,4 +12,3 @@ module.exports = async (client, msg, content) => {
     });
     msg.channel.send(`${amount - 1} Messages Deleted✅`).then(message => setTimeout(function(){message.delete()}, 2000));
 }
-    
