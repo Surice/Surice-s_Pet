@@ -16,9 +16,12 @@ module.exports = async (client, msg, content) => {
     console.log(channel);
 
     var chnl = await client.channels.fetch(channel);
-
-    chnl.send(quest).then(function(mes){
-        mes.react(react1);
-        mes.react(react2);
-    });
+    try{
+        chnl.send(quest).then(function(mes){
+            mes.react(react1);
+            mes.react(react2);
+        });
+    }catch(e){
+        msg.channel.send("incorrect input. please try again");
+    }
 }
