@@ -43,6 +43,9 @@ module.exports = (client, msg, content, permissions) =>{
             },{
                 name: "Channel",
                 value: `description: add/remove a channel as bot command channel \nSyntax: ${config.prefix}channel add/remove <#channel id>`,
+            },{
+                name: "Survey",
+                value: `description: creates an either or survey \nSyntax: ${config.prefix}survey <#channel id> <react emote 1> <react emote 2> <question>`
             }]
         }});
     }
@@ -59,7 +62,7 @@ module.exports = (client, msg, content, permissions) =>{
                 value: `description: let´s start flashing the "mitte" text channel \nSyntax: ${config.prefix}mitte stop(opt)`,
             },{
                 name: "say",
-                value: `description: the bot will say whatever you want and if you want as embed too \nSyntax: ${config.prefix}say <channelid> [embed(opt)] content`,
+                value: `description: the bot will say whatever you want and if you want as embed too \nSyntax: ${config.prefix}say <#channelid> [embed(opt)] content`,
             },{
                 name: "User",
                 value: `description: add/remove a user as bot Admin \nSyntax: ${config.prefix}user add/remove <@username>`,
