@@ -4,10 +4,12 @@ module.exports = async (client, fs, cron, mail, mailOptions)=> {
     let user1 = await client.users.fetch(config.owner),
         user2 = await client.users.fetch(config.owner2);
 
-    var offMsgSend = true;
+    var offMsgSend = true,
+        state = false; //the online state of the last scan
 
     var j = cron.job('0 */5 * * * *', function(){
         if(offMsgSend && user1.presence.clientStatus.web != "online" || offMsgSend && user2.presence.clientStatus.web != "online"){
+            state = true;
             offMsgSend = false;
             console.log("!Monitoring Alert!");
             console.log(user1.presence.clientStatus);
@@ -19,6 +21,9 @@ module.exports = async (client, fs, cron, mail, mailOptions)=> {
         }
         else if(!offMsgSend && user1.presence.clientStatus.web == "online" && user2.presence.clientStatus.web == "online"){
             offMsgSend = true;
+            mailOptions.subject = "Discord Assistent Update!";
+            mailOptions.text =`the Assistant has recently gone completely online again \n\n\non behalf of sebastian ulrich \n\nthis is a machine generated letter. an answer to this email cannot be handled. in case of problems or questions please write to info@sebastian-web.de`;
+            mail.sendMail(mailOptions);
         }
     });
     j.start();
