@@ -20,6 +20,12 @@ module.exports = (client, msg, content, permissions) =>{
         },{
             name: "Lyric",
             value: `description: sends the Lyric´s of an speicified Song \nSyntax: ${config.prefix}lyric <song title>`, 
+        },{
+            name: "Dog",
+            value: `description: sends an Random Dog Picture \nSyntax: ${config.prefix}dog`,
+        },{
+            name: "Cat",
+            value: `description: sends an Random Cat Picture \nSyntax: ${config.prefix}cat`,
         }]
     }});
 
