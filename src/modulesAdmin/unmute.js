@@ -1,4 +1,7 @@
-module.exports = async (client, msg, content) => {
+const mute = require('./mute');
+
+module.exports = async (client, msg, content, auto) => {
+    const Discord = require('discord.js');
     const fs = require('fs');
 
     var errContent = String;
@@ -21,17 +24,28 @@ module.exports = async (client, msg, content) => {
         var embed = new Discord.MessageEmbed()
         .setTitle("Unmute")
         .setThumbnail(muteMember.user.avatarURL())
-        .setAuthor(`${msg.author.tag}`, msg.author.avatarURL())
         .setFooter(muteMember.id, client.user.avatarURL())
         .setTimestamp(new Date());
+
+        if(!auto){
+            embed.setAuthor(msg.author.tag, msg.author.avatarURL());
+        }else{
+            embed.setAuthor(client.user.tag, client.user.avatarURL());
+        }
 
         if (mutes[server] && mutes[server].includes(muteMember.id)) {
             muteMember.roles.remove(role);
 
-            embed.setColor(0x34ad4c)
-            embed.setDescription(`Succesfully Unmuted <@${muteMember.id}>`);
+            embed.setColor(0x34ad4c);
+            if(!auto){
+                embed.setDescription(`Succesfully Unmuted <@${muteMember.id}>`);
+            }else{
+                embed.setDescription(`Successfully auto Unmuted <@${muteMember.id}>`);
+            }
 
-            msg.channel.send(embed);
+            if(!auto){
+                msg.channel.send(embed);
+            }
 
             var index = mutes[server].findIndex(e => e == muteMember.id);
             mutes[server].splice(index, 1); //remove index number of channel
@@ -51,6 +65,8 @@ module.exports = async (client, msg, content) => {
         embed.setDescription(`Error during unmuting of <@${muteMember.id}>`)
         embed.addField("Error", errContent);
 
-        msg.channel.send(embed);
+        if(!auto){
+            msg.channel.send(embed);
+        }
     }
 }
