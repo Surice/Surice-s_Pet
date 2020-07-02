@@ -85,8 +85,6 @@ module.exports = async (client, msg, content) => {
                     muteMember.roles.remove(e);
                 }
             });
-
-            console.log(mutes);
             fs.writeFileSync(`${__dirname}/../stor/muteUsers.json`, JSON.stringify(mutes));
 
             muteMember.roles.add(role);
