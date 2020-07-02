@@ -1,3 +1,3 @@
-module.exports = async (client, msg, content) => {
+module.exports = (client, msg, content) => {
     msg.channel.send("no test running");
 }

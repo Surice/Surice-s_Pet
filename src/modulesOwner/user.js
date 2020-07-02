@@ -1,26 +1,37 @@
 module.exports = async (client, msg, content) => {
-    const fs = require("fs");
+    const Discord = require('discord.js');
+    const fs = require('fs');
 
-    var errContent = String;
+    var errContent = String,
+        user;
 
     let users = JSON.parse(fs.readFileSync(`${__dirname}/../stor/users.json`).toString());
-
-    var embed = new Discord.MessageEmbed()
-        .setTitle("Muted")
-        .setThumbnail(msg.guild.iconURL)
-        .setAuthor(`${msg.author.tag}`, msg.author.avatarURL())
-        .setFooter(muteMember.id, client.user.avatarURL())
-        .setTimestamp(new Date());
 
     if (content[2] && content[2].startsWith("<@!")) {
         var temp = content[2].substr(3).slice(0, -1);
         content[2] = temp;
     }
+    try{
+        user = await client.users.fetch(content[2]).id;
+    }catch(e){
+        user = "Unknown";
+    }
+
+    var embed = new Discord.MessageEmbed()
+        .setTitle("Dev User")
+        .setThumbnail(client.user.avatarURL())
+        .setAuthor(`${msg.author.tag}`, msg.author.avatarURL())
+        .setFooter(user, client.user.avatarURL())
+        .setTimestamp(new Date());
+
+
     if(content[1] == "add"){
         if(!users.includes(content[2])){
             users.push(content[2]);;
             fs.writeFileSync(`${__dirname}/stor/users.json`, JSON.stringify(users));
-            embed.setColor(0x34ad4c)
+
+            embed.setColor(0x34ad4c);
+            embed.setThumbnail(user.avatarURL());
             embed.setDescription(`Succesfully added <@${content[2]}> to Dev User´s`);
         }else{
             errContent = "already Added";
@@ -33,7 +44,8 @@ module.exports = async (client, msg, content) => {
 
             users.splice(index, 1);; //remove index number of user
             fs.writeFileSync(`${__dirname}/../stor/users.json`, JSON.stringify(users));
-            embed.setColor(0x34ad4c)
+            embed.setColor(0x34ad4c);
+            embed.setThumbnail(user.avatarURL());
             embed.setDescription(`Succesfully removed <@${content[2]}> to Dev User´s`);
         }else{
             errContent = "User not Found";
@@ -55,7 +67,7 @@ module.exports = async (client, msg, content) => {
 
     function error(){
         embed.setColor('0xd42828')
-        embed.setDescription(`Error during editing of <#${content[2]}> to the Bot-Channel´s`)
+        embed.setDescription(`Error during editing of <@${content[2]}> to the bot Dev´s`)
         embed.addField("Error", errContent);
 
         msg.channel.send(embed);

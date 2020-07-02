@@ -1,14 +1,9 @@
 module.exports = async (client, msg, content) => {
-    const fs = require("fs");
+    const Discord = require('discord.js');
+    const fs = require('fs');
 
-    var errContent = String;
-
-    var embed = new Discord.MessageEmbed()
-        .setTitle("Muted")
-        .setThumbnail(msg.guild.iconURL)
-        .setAuthor(`${msg.author.tag}`, msg.author.avatarURL())
-        .setFooter(muteMember.id, client.user.avatarURL())
-        .setTimestamp(new Date());
+    var errContent = String,
+        channel
 
     //import the Channel Object from storage
     let channels = JSON.parse(fs.readFileSync(`${__dirname}/../stor/channels.json`).toString());
@@ -18,6 +13,19 @@ module.exports = async (client, msg, content) => {
         var temp = content[2].substr(2).slice(0, -1);
         content[2] = temp;
     }
+    try{
+        channel = await client.channels.fetch(content[2]).id;
+    }catch(e){
+        channel = "Unknown";
+    }
+
+    var embed = new Discord.MessageEmbed()
+        .setTitle("Channel")
+        .setThumbnail(msg.guild.iconURL)
+        .setAuthor(`${msg.author.tag}`, msg.author.avatarURL())
+        .setFooter(channel, client.user.avatarURL())
+        .setTimestamp(new Date());
+
 
     const server = msg.guild.name;
     //check if user want to add an new channel to storage
@@ -55,8 +63,9 @@ module.exports = async (client, msg, content) => {
     //send a list with all channels
     else {
         var output = new Array();
-        await channels[server].forEach(element => {
-            output.push(`<#${element}>`);
+
+        await channels[server].forEach(e => {
+            output.push(`<#${e}>`);
         });
         msg.channel.send({
             embed: {
