@@ -1,4 +1,4 @@
-module.exports = async (client, msg, content, auto) => {
+module.exports = async (client, msg, content, placeholder,auto) => {
     const Discord = require('discord.js');
     const fs = require('fs');
 
@@ -21,8 +21,9 @@ module.exports = async (client, msg, content, auto) => {
         const muteMember = await server.members.fetch(content[1]);
 
         //some response embed stuff
+        var embed = new Discord.MessageEmbed();
         if(!auto){
-            var embed = new Discord.MessageEmbed()
+            embed
             .setTitle("Unmute")
             .setThumbnail(muteMember.user.avatarURL())
             .setFooter(muteMember.id, client.user.avatarURL())
@@ -44,8 +45,8 @@ module.exports = async (client, msg, content, auto) => {
             });
 
             //set some response values
-            embed.setColor(0x34ad4c);
             if(!auto){
+                embed.setColor(0x34ad4c);
                 embed.setDescription(`Succesfully Unmuted <@${muteMember.id}>`);
             }
 
@@ -56,12 +57,17 @@ module.exports = async (client, msg, content, auto) => {
 
             //remove the user of muted index
             var mSer = mutes[server];
-            delete mSer[muteMember.id];
+            await delete mSer[muteMember.id];
+
+            //check if no muted users on server
+            if(Object.keys(mutes[server]).length == 0){
+                delete mutes[server];
+            }
 
             fs.writeFileSync(`${__dirname}/../stor/muteUsers.json`, JSON.stringify(mutes));
         }else{
             errContent = "User not Muted";
-            error();
+            error(muteMember);
         }
     }else{
         errContent = `please make sure your server has an Muted role.`;
