@@ -33,22 +33,22 @@ module.exports = async (client, msg, content) => {
             var s = cron.job(`*/${time} * * * * *`, function(){
                 s.stop();
                 let run = require(`${__dirname}/unmute`);
-                run(client, msg, content);
+                run(client, msg, content, true);
             });
             var m = cron.job(`0 */${time} * * * *`, function(){
                 m.stop();
                 let run = require(`${__dirname}/unmute`);
-                run(client, msg, content);
+                run(client, msg, content, true);
             });
             var h = cron.job(`0 0 */${time} * * *`, function(){
                 h.stop()
                 let run = require(`${__dirname}/unmute`);
-                run(client, msg, content);
+                run(client, msg, content, true);
             });
             var d = cron.job(`0 0 0 */${time} * *`, function(){
                 d.stop();
                 let run = require(`${__dirname}/unmute`);
-                run(client, msg, content);
+                run(client, msg, content, true);
             });
 
             if(content[2].endsWith("s")){
