@@ -122,7 +122,7 @@ client.on('message', (msg)=>{
 function authorized(msg){
     var response = new Array(),
         server = msg.guild.name;
-    
+
     if(msg.author.id == config.owner || msg.author.id == config.owner2 || users.includes(msg.author.id)){
         response.push("owner");
         response.push("admin");

@@ -5,7 +5,7 @@ module.exports = async (client, msg, content) => {
 
     var errContent = String;
 
-    const config = JSON.parse(fs.readFileSync(`${__dirname}/../config.json`,'utf-8'));
+    const config = JSON.parse(fs.readFileSync(`${__dirname}/../config.json`, 'utf-8'));
     let mutes = JSON.parse(fs.readFileSync(`${__dirname}/../stor/muteUsers.json`).toString());
     
     const server = msg.guild;
@@ -70,21 +70,31 @@ module.exports = async (client, msg, content) => {
         }
         
 
-        if (!mutes[server]) {
-            mutes[server] = new Array();
+        if(!mutes[server]){
+            mutes[server] = new Object();
         }
 
-        if(!mutes[server].includes(content[1])){
+        if(!(content[1] in mutes[server])){
+            var mSer = mutes[server];
+
+            mSer[content[1]] = new Array();
+        
+            await muteMember.roles.cache.forEach(e => {
+                if(e.name != '@everyone'){
+                    mSer[content[1]].push(e.id);
+                    muteMember.roles.remove(e);
+                }
+            });
+
+            console.log(mutes);
+            fs.writeFileSync(`${__dirname}/../stor/muteUsers.json`, JSON.stringify(mutes));
+
             muteMember.roles.add(role);
 
             embed.setColor(0x34ad4c)
             embed.setDescription(`Succesfully Muted <@${muteMember.id}>`);
 
             msg.channel.send(embed);
-
-            mutes[server].push(content[1]);
-
-            fs.writeFileSync(`${__dirname}/../stor/muteUsers.json`, JSON.stringify(mutes));
         } else {
             errContent = "already Muted";
             error(muteMember);
