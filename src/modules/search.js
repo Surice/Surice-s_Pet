@@ -5,6 +5,11 @@ module.exports = async (client, msg, content) => {
 
 
     try{
+        if (content[1] && content[1].startsWith("<@!")) {
+            var temp = content[1].substr(3).slice(0, -1);
+            content[1] = temp;
+        }
+
         var user = await client.users.fetch(content[1]);
         userInfoEmbed(user, msg).then(console.log("Search by Id: "+ content[1]));
     }catch{
