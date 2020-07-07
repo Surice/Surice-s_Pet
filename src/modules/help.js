@@ -6,14 +6,14 @@ module.exports = (client, msg, content, permissions) =>{
 
     msg.channel.send({embed:{
         title: "Commands",
-        description: " ",
+        description: "<requried Field> (Optional Field)",
         color: 0xa8a80d,
         thumbnail:{
             url: client.user.avatarURL(),
         },fields:
         [{
             name: "Search",
-            value: `description: returns an Information about the founded user \nSyntax: ${config.prefix}search <name>/<user id>`,
+            value: `description: returns an Information about the founded user \nSyntax: ${config.prefix}search <@user>/<name>/<user id>`,
         },{
             name: "Meme",
             value: `description: sends an random Meme \nSyntax: ${config.prefix}meme`,
@@ -36,22 +36,28 @@ module.exports = (client, msg, content, permissions) =>{
             color: 0xc76f12,
             fields:[{
                 name: "Kick",
-                value: `description: kick´s an Player from current Server \nSyntax: ${config.prefix}kick <@user>/<user id>`,
+                value: `description: kick´s an Player from current Server \nSyntax: ${config.prefix}kick <@user>/<user id> (reason)`,
             },{
                 name: "Ban",
-                value: `description: Ban´s an Player from current Server \nSyntax: ${config.prefix}ban <@user>/<user id>`,
+                value: `description: Ban´s an Player from current Server \nSyntax: ${config.prefix}ban <@user>/<user id> (duration[s, m,h,d]) (reason)`,
+            },{
+                name: "Unban",
+                value: `description: Unban´s an Player from current Server \nSyntax: ${config.prefix}unban <@user>/<user id>`,
             },{
                 name: "Mute",
-                value: `description: add the Muted role to an Player \nSyntax: ${config.prefix}mute <@user>/<user id> (duration[s, m,h,d])`,
+                value: `description: Add the Muted role to an Player \nSyntax: ${config.prefix}mute <@user>/<user id> (duration[s, m,h,d]) (reason)`,
+            },{
+                name: "Unmute",
+                value: `description: Remove the Muted role to an Player and give all Roles back \nSyntax: ${config.prefix}unmute <@user>/<user id>`,
             },{
                 name: "Purge",
-                value: `description: purges a specific amount of messages \nSyntax: ${config.prefix}purge <mount of messages>`,
+                value: `description: Purges a specific amount of messages \nSyntax: ${config.prefix}purge (mount of messages)`,
             },{
                 name: "Channel",
-                value: `description: add/remove a channel as bot command channel \nSyntax: ${config.prefix}channel add/remove <#channel id>`,
+                value: `description: Add/Remove a channel as bot command channel \nSyntax: ${config.prefix}channel add/remove <#channel id>`,
             },{
                 name: "Survey",
-                value: `description: creates an either or survey \nSyntax: ${config.prefix}survey <#channel id> <react emote 1> <react emote 2> <question>`
+                value: `description: Creates an either or survey \nSyntax: ${config.prefix}survey <#channel id> <react emote 1> <react emote 2> <question>`
             }]
         }});
     }

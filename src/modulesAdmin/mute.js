@@ -13,11 +13,7 @@ module.exports = async (client, msg, content) => {
 
 
     if(role){
-        if (content[1] && content[1].startsWith("<@!")) {
-            var temp = content[1].substr(3).slice(0, -1);
-            content[1] = temp;
-        }
-        const muteMember = await server.members.fetch(content[1]);
+        let member = msg.mentions.members.first() || await msg.guild.members.fetch(content[1]);
         
         var reason = false;
 
@@ -48,22 +44,22 @@ module.exports = async (client, msg, content) => {
             if(time){
                 var s = cron.job(`*/${time} * * * * *`, function(){
                     s.stop();
-                    let run = require(`${__dirname}/unmute`);
+                    let run = require(`${__dirname}/unmute.js`);
                     run(client, msg, content, true);
                 });
                 var m = cron.job(`0 */${time} * * * *`, function(){
                     m.stop();
-                    let run = require(`${__dirname}/unmute`);
+                    let run = require(`${__dirname}/unmute.js`);
                     run(client, msg, content, true);
                 });
                 var h = cron.job(`0 0 */${time} * * *`, function(){
                     h.stop()
-                    let run = require(`${__dirname}/unmute`);
+                    let run = require(`${__dirname}/unmute.js`);
                     run(client, msg, content, true);
                 });
                 var d = cron.job(`0 0 0 */${time} * *`, function(){
                     d.stop();
-                    let run = require(`${__dirname}/unmute`);
+                    let run = require(`${__dirname}/unmute.js`);
                     run(client, msg, content, true);
                 });
             }
