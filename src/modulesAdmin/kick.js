@@ -10,10 +10,9 @@ module.exports = async (client, msg, content) => {
         .setFooter(content[1])
         .setTimestamp(new Date());
 
-    
 
-    try{
-        let member = msg.mentions.members.first() || await msg.guild.members.fetch(content[1]);
+    let member = msg.mentions.members.first() || await msg.guild.members.fetch(content[1]);
+    if(member){
         const reason = content.slice(2).join(" ");
 
         embed.setThumbnail(member.user.avatarURL());
@@ -31,14 +30,8 @@ module.exports = async (client, msg, content) => {
             error();
         }
 
-    }
-    catch(err){
-        if(err.code == 10013 || err.code == 50035){
-            errContent = "User not Found";
-        }else{
-            console.log(err);
-            errContent = "unexpected error";
-        }
+    }else{
+        errContent = "User not found";
         error();
     }
 
