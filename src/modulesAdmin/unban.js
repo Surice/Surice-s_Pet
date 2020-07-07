@@ -36,7 +36,7 @@ module.exports = async (client, msg, content, placeholder,auto) => {
             //send response embed if manually unmuted
             if(!auto){
                 embed.setColor(0x34ad4c);
-                embed.setDescription(`Succesfully Unmuted <@${member.id}>`);
+                embed.setDescription(`Succesfully Unmuted <@${user.id}>`);
                 msg.channel.send(embed);
             }
         }else{

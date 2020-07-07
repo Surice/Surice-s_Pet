@@ -1,4 +1,7 @@
 module.exports = async (client, msg, content) => {
+    const Discord = require('discord.js');
+    const cron = require('cron');
+    const fs = require('fs');
 
     var errContent = String;
 
@@ -6,14 +9,17 @@ module.exports = async (client, msg, content) => {
 
     let member = msg.mentions.members.first() || await msg.guild.members.fetch(content[1]);
 
-    var embed = new Discord.MessageEmbed()
+
+    if(member.bannable){
+        var reason = false;
+
+        var embed = new Discord.MessageEmbed()
         .setTitle("Ban")
         .setThumbnail(member.user.avatarURL())
         .setAuthor(`${msg.author.tag}`, msg.author.avatarURL())
         .setFooter(member.id, client.user.avatarURL())
         .setTimestamp(new Date());
 
-    if(member.banable){
         if(content[2]){
             var time = false;
             if(/^\d+$/.test(content[2].slice(0,-1))){
@@ -33,22 +39,22 @@ module.exports = async (client, msg, content) => {
                 var s = cron.job(`*/${time} * * * * *`, function(){
                     s.stop();
                     let run = require(`${__dirname}/unban.js`);
-                    run(client, msg, content, true);
+                    run(client, msg, content, placeholder, true);
                 });
                 var m = cron.job(`0 */${time} * * * *`, function(){
                     m.stop();
                     let run = require(`${__dirname}/unban.js`);
-                    run(client, msg, content, true);
+                    run(client, msg, content, placeholder, true);
                 });
                 var h = cron.job(`0 0 */${time} * * *`, function(){
                     h.stop()
                     let run = require(`${__dirname}/unban.js`);
-                    run(client, msg, content, true);
+                    run(client, msg, content, placeholder, true);
                 });
                 var d = cron.job(`0 0 0 */${time} * *`, function(){
                     d.stop();
                     let run = require(`${__dirname}/unban.js`);
-                    run(client, msg, content, true);
+                    run(client, msg, content, placeholder, true);
                 });
             }
 
@@ -70,7 +76,7 @@ module.exports = async (client, msg, content) => {
             }
         }
 
-        await member.ban(reason).then(function(){
+        await member.ban({reason: reason}).then(function(){
             embed.setColor(0x34ad4c)
             embed.setDescription(`Succesfully banned <@${member.id}>`);
 

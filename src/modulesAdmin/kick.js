@@ -20,7 +20,7 @@ module.exports = async (client, msg, content) => {
         embed.setFooter(member.id, client.user.avatarURL());
 
         if(member.kickable){
-            await member.kick(reason).then(function(){
+            await member.kick({reason: reason}).then(function(){
                 embed.setColor(0x34ad4c)
                 embed.setDescription(`Succesfully kicked <@${member.id}>`);
 
