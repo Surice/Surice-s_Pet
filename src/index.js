@@ -64,7 +64,7 @@ client.on('message', (msg)=>{
         let runfile = require(`${__dirname}/automatic/dmredirection.js`);
         runfile(client,msg);
 	}else{
-        var content = msg.content.substr(config.prefixlengh).split(' '),
+        const content = msg.content.substr(config.prefixlengh).split(' '),
             errorLog = String;
 
         if(msg.content.startsWith(config.prefix)){
