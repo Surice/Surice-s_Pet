@@ -70,21 +70,14 @@ module.exports = async (client, msg, content) => {
                 });
             });
         }else{
+            var out = '';
             for(i in warns[server]){
-                embed.addFields({name: '\u200B', value: '\u200B'},{name: "-------------", value: `<@${i}>`});
-
-                await wSer[i].forEach((e)=>{
-                    embed.addFields({
-                        name: "From:", value: e[2]
-                    },{
-                        name: "Reason", value: e[0], inline: true
-                    },{
-                        name: "Enforced by", value: `<@${e[1]}>`, inline: true
-                    },{
-                        name: "Index: ", value: e[3], inline: true
-                    });
-                });
+                out = out + `<@${i}> **${wSer[i].length}** \n`;
             }
+            if(out == ''){
+                out = "no warnings exist";
+            }
+            embed.addFields({name: `Warnings on ${server.name}`, value: out});
         }
         msg.channel.send(embed);
     }
