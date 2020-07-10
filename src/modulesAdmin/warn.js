@@ -31,10 +31,9 @@ module.exports = async (client, msg, content) => {
         }
         var wSer = warns[server];
         if(!(member.id in wSer)){
-            wSer[member.id] = new Array(reason, msg.author.id, new Date());
-        }else{
-            wSer[member.id].push(reason, msg.author.id, new Date());
+            wSer[member.id] = new Array();
         }
+        wSer[member.id].push(new Array(reason, msg.author.id, new Date()));
                 
         fs.writeFileSync(`${__dirname}/../stor/warns.json`, JSON.stringify(warns));
             

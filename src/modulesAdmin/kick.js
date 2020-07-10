@@ -12,7 +12,7 @@ module.exports = async (client, msg, content) => {
 
 
     let member = msg.mentions.members.first() || await msg.guild.members.fetch(content[1]);
-    if(member){
+    if(member.id){
         const reason = content.slice(2).join(" ");
         if(reason){
             embed.addField("Reason", reason);
