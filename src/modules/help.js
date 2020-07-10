@@ -53,6 +53,12 @@ module.exports = (client, msg, content, permissions) =>{
                 name: "Warn",
                 value: `description: Warn an user on the curront Server \nSyntax: ${config.prefix}warn <@user>/<user id> (reason)`,
             },{
+                name: "Warns",
+                value: `description: returns an list of all/specific warned users \nSyntax: ${config.prefix}warns (@user/user id)`
+            },{
+                name: "Remove Warns",
+                value: `description: delete Warns of an user \nSyntax: ${config.prefix}warns rm <@user>/<user id> all/<index>`
+            },{
                 name: "Purge",
                 value: `description: Purges a specific amount of messages \nSyntax: ${config.prefix}purge (mount of messages)`,
             },{

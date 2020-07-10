@@ -33,7 +33,7 @@ module.exports = async (client, msg, content) => {
         if(!(member.id in wSer)){
             wSer[member.id] = new Array();
         }
-        await wSer[member.id].push(new Array(reason, msg.author.id, createTimeSort()));
+        await wSer[member.id].push(new Array(reason, msg.author.id, await createTimeSort(), await getIndex(wSer[member.id])));
                 
         fs.writeFileSync(`${__dirname}/../stor/warns.json`, JSON.stringify(warns));
             
@@ -43,8 +43,13 @@ module.exports = async (client, msg, content) => {
 
         msg.channel.send(embed);
     }else{
-        errContent = "you are not authorized to ban this person";
+        errContent = "User not found";
         error();
+    }
+
+    function getIndex(li){
+        var response = li.length +1;
+        return response;
     }
 
     function error(){

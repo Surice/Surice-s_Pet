@@ -6,51 +6,94 @@ module.exports = async (client, msg, content) => {
     let warns = JSON.parse(fs.readFileSync(`${__dirname}/../stor/warns.json`).toString());
 
     const server = msg.guild;
-
-    let member = msg.mentions.members.first() || await msg.guild.members.fetch(content[1]);
-
-    var embed = new Discord.MessageEmbed()
-    .setTitle("Warns")
-    .setThumbnail(server.iconURL())
-    .setFooter(msg.author.id, client.user.avatarURL())
-    .setColor(0x0c9fb3)
-    .setTimestamp(new Date());
-
     var wSer = warns[server];
-    if(member.id){
-        const ar = wSer[member.id];
 
-        embed.setDescription(`Warns from <@${member.id}>`)
-            .setThumbnail(member.user.avatarURL());
+    if(content[1] == "rm"){
+        let member = msg.mentions.members.first() || await msg.guild.members.fetch(content[2]);
 
-        await ar.forEach((e)=>{
-            embed.addFields({
-                name: '\u200B', value: '\u200B'
-            },{
-                name: "From:", value: e[2]
-            },{
-                name: "Reason", value: e[0], inline: true
-            },{
-                name: "Enforced by", value: `<@${e[1]}>`, inline: true
-            });
-        });
+        if(member.id){
+            var embed = new Discord.MessageEmbed()
+            .setTitle("Remove Warn")
+            .setThumbnail(member.user.avatarURL())
+            .setAuthor(`${msg.author.tag}`, msg.author.avatarURL())
+            .setFooter(member.id, client.user.avatarURL())
+            .setTimestamp(new Date());
+
+            if(wSer[member.id]){
+                if(content[3] == "all"){
+                    await delete wSer[member.id];
+                }else{
+                    const num = content[3];
+
+                    wSer[member.id].splice((num-1), 1);
+                }
+
+                if(Object.keys(warns[server]).length == 0){
+                    delete warns[server];
+                }
+                fs.writeFileSync(`${__dirname}/../stor/warns.json`, JSON.stringify(warns));
+            }else{
+                errContent = "User not warned";
+                error();
+            }
+        }else{
+            errContent = "User not found";
+            error();
+        }
     }else{
-        for(i in warns[server]){
-            embed.addFields({name: '\u200B', value: '\u200B'},{name: "-------------", value: `<@${i}>`});
+        let member = msg.mentions.members.first() || await msg.guild.members.fetch(content[1]);
 
-            await wSer[i].forEach((e)=>{
+        var embed = new Discord.MessageEmbed()
+        .setTitle("Warns")
+        .setThumbnail(server.iconURL())
+        .setFooter(msg.author.id, client.user.avatarURL())
+        .setColor(0x0c9fb3)
+        .setTimestamp(new Date());
+
+        if(member.id){
+            const ar = wSer[member.id];
+
+            embed.setDescription(`Warns from <@${member.id}>`)
+                .setThumbnail(member.user.avatarURL());
+
+            await ar.forEach((e)=>{
                 embed.addFields({
+                    name: '\u200B', value: '\u200B'
+                },{
                     name: "From:", value: e[2]
                 },{
                     name: "Reason", value: e[0], inline: true
                 },{
                     name: "Enforced by", value: `<@${e[1]}>`, inline: true
+                },{
+                    name: "Index: ", value: e[3], inline: true
                 });
             });
+        }else{
+            for(i in warns[server]){
+                embed.addFields({name: '\u200B', value: '\u200B'},{name: "-------------", value: `<@${i}>`});
+
+                await wSer[i].forEach((e)=>{
+                    embed.addFields({
+                        name: "From:", value: e[2]
+                    },{
+                        name: "Reason", value: e[0], inline: true
+                    },{
+                        name: "Enforced by", value: `<@${e[1]}>`, inline: true
+                    },{
+                        name: "Index: ", value: e[3], inline: true
+                    });
+                });
+            }
         }
+        msg.channel.send(embed);
     }
-    msg.channel.send(embed);
 
+    function error(){
+        embed.setColor('0xd42828')
+        embed.setDescription(`Error during remove Warn of <@${member.id}>`)
+        embed.addField("Error", errContent);
 
-    
+        msg.channel.send(embed);
+    }
 }
