@@ -33,7 +33,7 @@ module.exports = async (client, msg, content) => {
         if(!(member.id in wSer)){
             wSer[member.id] = new Array();
         }
-        wSer[member.id].push(new Array(reason, msg.author.id, new Date()));
+        await wSer[member.id].push(new Array(reason, msg.author.id, createTimeSort()));
                 
         fs.writeFileSync(`${__dirname}/../stor/warns.json`, JSON.stringify(warns));
             
@@ -54,4 +54,19 @@ module.exports = async (client, msg, content) => {
 
         msg.channel.send(embed);
     }
+}
+
+async function createTimeSort(){
+    var today = new Date();
+
+    if(today.getMinutes() < 10){
+        var min = "0"+today.getMinutes();
+    }else{var min = today.getMinutes()};
+    if(today.getHours() < 10){
+        var hou = "0"+today.getHours();
+    }else{var hou = today.getHours()};
+    
+    today = await `${hou}:${min} (${today.getDate()}/${today.getMonth()+1}/${today.getFullYear()})`;
+
+    return today;
 }

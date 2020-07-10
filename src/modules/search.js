@@ -219,7 +219,6 @@ module.exports = async (client, msg, content) => {
             minute = `0${minute}`;
         }
         day = await parseInt(day);
-//    await console.log(day = days[day+1]);
         timeZoon = timeZoon/60;
 
         response = await `on ${days[day+1]} at ${hour}:${minute} ${amPm} the \n${date}.${month}.${year} \nin Timezoon \n(UTC)${timeZoon}`
