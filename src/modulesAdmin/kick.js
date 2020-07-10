@@ -14,6 +14,9 @@ module.exports = async (client, msg, content) => {
     let member = msg.mentions.members.first() || await msg.guild.members.fetch(content[1]);
     if(member){
         const reason = content.slice(2).join(" ");
+        if(reason){
+            embed.addField("Reason", reason);
+        }
 
         embed.setThumbnail(member.user.avatarURL());
         embed.setFooter(member.id, client.user.avatarURL());
