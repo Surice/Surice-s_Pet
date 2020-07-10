@@ -11,7 +11,7 @@ module.exports = async (client, msg, content) => {
 
     let member = msg.mentions.members.first() || await msg.guild.members.fetch(content[1]);
 
-    if(member){
+    if(member.id){
         var reason = "no reason given";
 
         var embed = new Discord.MessageEmbed()

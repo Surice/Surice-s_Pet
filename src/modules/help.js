@@ -13,7 +13,7 @@ module.exports = (client, msg, content, permissions) =>{
         },fields:
         [{
             name: "Search",
-            value: `description: returns an Information about the founded user \nSyntax: ${config.prefix}search <@user>/<name>/<user id>`,
+            value: `description: returns an Information about the founded user \nSyntax: ${config.prefix}search <@user>/<user name>/<user id>`,
         },{
             name: "Meme",
             value: `description: sends an random Meme \nSyntax: ${config.prefix}meme`,
@@ -49,6 +49,9 @@ module.exports = (client, msg, content, permissions) =>{
             },{
                 name: "Unmute",
                 value: `description: Remove the Muted role to an Player and give all Roles back \nSyntax: ${config.prefix}unmute <@user>/<user id>`,
+            },{
+                name: "Warn",
+                value: `description: Warn an user on the curront Server \nSyntax: ${config.prefix}warn <@user>/<user id> (reason)`,
             },{
                 name: "Purge",
                 value: `description: Purges a specific amount of messages \nSyntax: ${config.prefix}purge (mount of messages)`,
