@@ -25,23 +25,27 @@ module.exports = async (client, msg, content) => {
             var reason = content.slice(2, reason.length).join(' ');
         }
     
-
-        if(!warns[server]){
-            warns[server] = new Object();
-        }
-        var wSer = warns[server];
-        if(!(member.id in wSer)){
-            wSer[member.id] = new Array();
-        }
-        await wSer[member.id].push(new Array(reason, msg.author.id, await createTimeSort(), await getIndex(wSer[member.id])));
+        if(msg.member.roles.highest.position > member.roles.highest.position){
+            if(!warns[server]){
+                warns[server] = new Object();
+            }
+            var wSer = warns[server];
+            if(!(member.id in wSer)){
+                wSer[member.id] = new Array();
+            }
+            await wSer[member.id].push(new Array(reason, msg.author.id, await createTimeSort(), await getIndex(wSer[member.id])));
+                    
+            fs.writeFileSync(`${__dirname}/../stor/warns.json`, JSON.stringify(warns));
                 
-        fs.writeFileSync(`${__dirname}/../stor/warns.json`, JSON.stringify(warns));
-            
-        embed.addField("Reason", reason)
-        embed.setColor(0x34ad4c)
-        embed.setDescription(`Succesfully Warned <@${member.id}>`);
+            embed.addField("Reason", reason)
+            embed.setColor(0x34ad4c)
+            embed.setDescription(`Succesfully Warned <@${member.id}>`);
 
-        msg.channel.send(embed);
+            msg.channel.send(embed);
+        }else{
+            errContent = "You are unauthorized to warn this person";
+            error();
+        }
     }else{
         errContent = "User not found";
         error();
