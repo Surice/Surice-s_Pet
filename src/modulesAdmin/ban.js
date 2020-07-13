@@ -104,7 +104,7 @@ module.exports = async (client, msg, content) => {
 
         try{
             let member = await msg.guild.members.fetch(user.id);
-            if(msg.author.roles.highest.position > member.roles.highest.position){
+            if(msg.author.roles.highest.position > member.roles.highest.position || msg.author.id == msg.guild.owner.id){
                 res = true;
             }
         }catch{

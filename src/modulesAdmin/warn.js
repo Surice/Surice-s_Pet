@@ -25,7 +25,7 @@ module.exports = async (client, msg, content) => {
             var reason = content.slice(2, reason.length).join(' ');
         }
     
-        if(msg.member.roles.highest.position > member.roles.highest.position){
+        if(msg.member.roles.highest.position > member.roles.highest.position || msg.author.id == msg.guild.owner.id){
             if(!warns[server]){
                 warns[server] = new Object();
             }

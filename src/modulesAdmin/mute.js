@@ -25,7 +25,7 @@ module.exports = async (client, msg, content) => {
             .setTimestamp(new Date());
 
 
-            if(msg.member.roles.highest.position > member.roles.highest.position){
+            if(msg.member.roles.highest.position > member.roles.highest.position || msg.author.id == msg.guild.owner.id){
                 if(content[2]){
                     var time = false;
                     if(/^\d+$/.test(content[2].slice(0,-1))){

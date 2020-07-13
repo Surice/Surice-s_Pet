@@ -33,7 +33,7 @@ module.exports = async (client, msg, content, placeholder,auto) => {
 
         //check is user muted
         if(mutes[server] && muteMember.id in mutes[server]){
-            if(msg.member.roles.highest.position > member.roles.highest.position){
+            if(msg.member.roles.highest.position > member.roles.highest.position || msg.author.id == msg.guild.owner.id){
                 //removes "muted" role
                 muteMember.roles.remove(role);
                 
