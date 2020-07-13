@@ -21,7 +21,9 @@ module.exports = async (client, msg, content) => {
             .setTimestamp(new Date());
 
             if(content[2]){
-                var time = false;
+                var time = false,
+                    dur = false;
+
                 if(/^\d+$/.test(content[2].slice(0,-1))){
                     time = content[2].slice(0,-1);
                     if(content[3]){
@@ -60,27 +62,33 @@ module.exports = async (client, msg, content) => {
 
                 if(content[2].endsWith("s") && time){
                     embed.addField("Duration", `${time} Seconds`);
+                    dur = `${time} Seconds`
                     s.start();
                 }
                 else if(content[2].endsWith("m") && time){
                     embed.addField("Duration", `${time} Minutes`);
+                    dur = `${time} Minutes`
                     m.start();
                 }
                 else if(content[2].endsWith("h") && time){
                     embed.addField("Duration", `${time} Hours`);
+                    dur = `${time} Hours`
                     h.start();
                 }
                 else if(content[2].endsWith("d") && time){
                     embed.addField("Duration", `${time} Days`);
+                    dur = `${time} Days`
                     d.start();
                 }
             }
 
             await member.ban({reason: reason}).then(function(){
-                embed.setColor(0x34ad4c)
+                embed.setColor('0x34ad4c')
                 embed.setDescription(`Succesfully banned <@${member.id}>`);
 
                 msg.channel.send(embed);
+                let dnot = require(`${__dirname}/../automatic/dmNotification.js`);
+                dnot.run(client, "banned", member, msg.author, reason, msg.guild, dur);
             });
         }else{
             errContent = "you are not authorized to ban this person";

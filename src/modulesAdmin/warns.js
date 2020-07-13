@@ -18,20 +18,24 @@ module.exports = async (client, msg, content) => {
             .setAuthor(`${msg.author.tag}`, msg.author.avatarURL())
             .setFooter(member.id, client.user.avatarURL())
             .setTimestamp(new Date());
+            if(msg.member.roles.highest.position > member.roles.highest.position){
+                if(wSer[member.id]){
+                    if(content[3] == "all"){
+                        await delete wSer[member.id];
+                    }else{
+                        const num = content[3];
 
-            if(wSer[member.id]){
-                if(content[3] == "all"){
-                    await delete wSer[member.id];
+                        wSer[member.id].splice((num-1), 1);
+                    }
+
+                    if(Object.keys(warns[server]).length == 0){
+                        delete warns[server];
+                    }
+                    fs.writeFileSync(`${__dirname}/../stor/warns.json`, JSON.stringify(warns));
                 }else{
-                    const num = content[3];
-
-                    wSer[member.id].splice((num-1), 1);
+                    errContent = "You are not authorized to delete warns from this person";
+                    error();
                 }
-
-                if(Object.keys(warns[server]).length == 0){
-                    delete warns[server];
-                }
-                fs.writeFileSync(`${__dirname}/../stor/warns.json`, JSON.stringify(warns));
             }else{
                 errContent = "User not warned";
                 error();

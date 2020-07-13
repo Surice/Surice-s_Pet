@@ -33,38 +33,43 @@ module.exports = async (client, msg, content, placeholder,auto) => {
 
         //check is user muted
         if(mutes[server] && muteMember.id in mutes[server]){
-            //removes "muted" role
-            muteMember.roles.remove(role);
-            
-            //set all roles of user
-            var mSer = mutes[server];
-            await mSer[muteMember.id].forEach(async (e, i) =>{
-                var arole = await server.roles.fetch(e);
-                mSer[muteMember.id].splice(0, i);
-                muteMember.roles.add(arole);
-            });
+            if(msg.member.roles.highest.position > member.roles.highest.position){
+                //removes "muted" role
+                muteMember.roles.remove(role);
+                
+                //set all roles of user
+                var mSer = mutes[server];
+                await mSer[muteMember.id].forEach(async (e, i) =>{
+                    var arole = await server.roles.fetch(e);
+                    mSer[muteMember.id].splice(0, i);
+                    muteMember.roles.add(arole);
+                });
 
-            //set some response values
-            if(!auto){
-                embed.setColor(0x34ad4c);
-                embed.setDescription(`Succesfully Unmuted <@${muteMember.id}>`);
+                //set some response values
+                if(!auto){
+                    embed.setColor(0x34ad4c);
+                    embed.setDescription(`Succesfully Unmuted <@${muteMember.id}>`);
+                }
+
+                //send response embed if manually unmuted
+                if(!auto){
+                    msg.channel.send(embed);
+                }
+
+                //remove the user of muted index
+                var mSer = mutes[server];
+                await delete mSer[muteMember.id];
+
+                //check if no muted users on server
+                if(Object.keys(mutes[server]).length == 0){
+                    delete mutes[server];
+                }
+
+                fs.writeFileSync(`${__dirname}/../stor/muteUsers.json`, JSON.stringify(mutes));
+            }else{
+                errContent = "You are not authorized to unmute this person";
+                error();
             }
-
-            //send response embed if manually unmuted
-            if(!auto){
-                msg.channel.send(embed);
-            }
-
-            //remove the user of muted index
-            var mSer = mutes[server];
-            await delete mSer[muteMember.id];
-
-            //check if no muted users on server
-            if(Object.keys(mutes[server]).length == 0){
-                delete mutes[server];
-            }
-
-            fs.writeFileSync(`${__dirname}/../stor/muteUsers.json`, JSON.stringify(mutes));
         }else{
             errContent = "User not Muted";
             error(muteMember);

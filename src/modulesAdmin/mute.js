@@ -19,9 +19,9 @@ module.exports = async (client, msg, content) => {
 
             var embed = new Discord.MessageEmbed()
             .setTitle("Mute")
-            .setThumbnail(muteMember.user.avatarURL())
+            .setThumbnail(member.user.avatarURL())
             .setAuthor(`${msg.author.tag}`, msg.author.avatarURL())
-            .setFooter(muteMember.id, client.user.avatarURL())
+            .setFooter(member.id, client.user.avatarURL())
             .setTimestamp(new Date());
 
 
@@ -93,26 +93,26 @@ module.exports = async (client, msg, content) => {
 
                     mSer[content[1]] = new Array();
                 
-                    await muteMember.roles.cache.forEach(e => {
+                    await member.roles.cache.forEach(e => {
                         if(e.name != '@everyone'){
                             mSer[content[1]].push(e.id);
-                            muteMember.roles.remove(e);
+                            member.roles.remove(e);
                         }
                     });
                     fs.writeFileSync(`${__dirname}/../stor/muteUsers.json`, JSON.stringify(mutes));
 
-                    muteMember.roles.add(role);
+                    member.roles.add(role);
 
                     embed.setColor(0x34ad4c)
-                    embed.setDescription(`Succesfully Muted <@${muteMember.id}>`);
+                    embed.setDescription(`Succesfully Muted <@${member.id}>`);
 
                     msg.channel.send(embed);
                 } else {
                     errContent = "already Muted";
-                    error(muteMember);
+                    error(member);
                 }
             }else{
-                errContent = "You are unauthorized to mute this person";
+                errContent = "You are not authorized to mute this person";
                 error();
             }
         }else{
@@ -125,9 +125,9 @@ module.exports = async (client, msg, content) => {
     }
 
 
-    function error (muteMember){
+    function error (member){
         embed.setColor('0xd42828')
-        embed.setDescription(`Error during muting of <@${muteMember.id}>`)
+        embed.setDescription(`Error during muting of <@${member.id}>`)
         embed.addField("Error", errContent);
 
         msg.channel.send(embed);
