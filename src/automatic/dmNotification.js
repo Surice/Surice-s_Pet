@@ -5,7 +5,7 @@ module.exports = (client, process, user, mod, reason, server, time) => {
     .setTitle(process)
     .setThumbnail(server.iconURL())
     .setAuthor(mod.tag, mod.avatarURL())
-    .setDescription(`you were ${process} from ${server.name}`)
+    .setDescription(`you were ${process} ${server.name}`)
     .addField("Reason:", reason)
     .setTimestamp(new Date());
 

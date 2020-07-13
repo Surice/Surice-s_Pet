@@ -68,18 +68,22 @@ module.exports = async (client, msg, content) => {
 
                     if(content[2].endsWith("s") && time){
                         embed.addField("Duration", `${time} Seconds`);
+                        dur = `${time} Seconds`
                         s.start();
                     }
                     else if(content[2].endsWith("m") && time){
                         embed.addField("Duration", `${time} Minutes`);
+                        dur = `${time} Minutes`
                         m.start();
                     }
                     else if(content[2].endsWith("h") && time){
                         embed.addField("Duration", `${time} Hours`);
+                        dur = `${time} Hours`
                         h.start();
                     }
                     else if(content[2].endsWith("d") && time){
                         embed.addField("Duration", `${time} Days`);
+                        dur = `${time} Days`
                         d.start();
                     }
                 }
@@ -107,6 +111,8 @@ module.exports = async (client, msg, content) => {
                     embed.setDescription(`Succesfully Muted <@${member.id}>`);
 
                     msg.channel.send(embed);
+                    let dnot = require(`${__dirname}/../automatic/dmNotification.js`);
+                    dnot(client, "Muted at", member, msg.author, reason, msg.guild, dur);
                 } else {
                     errContent = "already Muted";
                     error(member);

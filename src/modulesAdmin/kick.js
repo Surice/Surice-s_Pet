@@ -27,6 +27,8 @@ module.exports = async (client, msg, content) => {
                 embed.setDescription(`Succesfully kicked <@${member.id}>`);
 
                 msg.channel.send(embed);
+                let dnot = require(`${__dirname}/../automatic/dmNotification.js`);
+                dnot(client, "Kicked from", member, msg.author, reason, msg.guild, null);
             });
         }else{
             errContent = "you are not authorized to kick this person";

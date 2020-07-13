@@ -88,7 +88,7 @@ module.exports = async (client, msg, content) => {
 
                 msg.channel.send(embed);
                 let dnot = require(`${__dirname}/../automatic/dmNotification.js`);
-                dnot(client, "banned", user, msg.author, reason, msg.guild, dur);
+                dnot(client, "banned from", user, msg.author, reason, msg.guild, dur);
             });
         }else{
             errContent = "you are not authorized to ban this person";

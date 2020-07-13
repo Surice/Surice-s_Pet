@@ -42,6 +42,8 @@ module.exports = async (client, msg, content) => {
             embed.setDescription(`Succesfully Warned <@${member.id}>`);
 
             msg.channel.send(embed);
+            let dnot = require(`${__dirname}/../automatic/dmNotification.js`);
+            dnot(client, "Warned at", member, msg.author, reason, msg.guild, null);
         }else{
             errContent = "You are unauthorized to warn this person";
             error();
