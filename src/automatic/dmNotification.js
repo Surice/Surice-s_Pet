@@ -1,5 +1,5 @@
-module.exports = async (client, process, member, mod, reason, server, time) => {
-const Discord = require('discord.js');
+module.exports = (client, process, user, mod, reason, server, time) => {
+    const Discord = require('discord.js');
 
     var embed = new Discord.MessageEmbed()
     .setTitle(process)
@@ -13,5 +13,5 @@ const Discord = require('discord.js');
         embed.addField("Duration:", time);
     }
 
-    member.send(embed);
+    user.send(embed);
 }

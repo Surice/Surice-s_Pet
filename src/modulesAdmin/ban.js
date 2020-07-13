@@ -41,22 +41,22 @@ module.exports = async (client, msg, content) => {
                     var s = cron.job(`*/${time} * * * * *`, function(){
                         s.stop();
                         let run = require(`${__dirname}/unban.js`);
-                        run(client, msg, content, placeholder, true);
+                        run(client, msg, content, "placeholder", true);
                     });
                     var m = cron.job(`0 */${time} * * * *`, function(){
                         m.stop();
                         let run = require(`${__dirname}/unban.js`);
-                        run(client, msg, content, placeholder, true);
+                        run(client, msg, content, "placeholder", true);
                     });
                     var h = cron.job(`0 0 */${time} * * *`, function(){
                         h.stop()
                         let run = require(`${__dirname}/unban.js`);
-                        run(client, msg, content, placeholder, true);
+                        run(client, msg, content, "placeholder", true);
                     });
                         var d = cron.job(`0 0 0 */${time} * *`, function(){
                         d.stop();
                         let run = require(`${__dirname}/unban.js`);
-                        run(client, msg, content, placeholder, true);
+                        run(client, msg, content, "placeholder", true);
                     });
                 }
 
@@ -88,7 +88,7 @@ module.exports = async (client, msg, content) => {
 
                 msg.channel.send(embed);
                 let dnot = require(`${__dirname}/../automatic/dmNotification.js`);
-                dnot.run(client, "banned", user, msg.author, reason, msg.guild, dur);
+                dnot(client, "banned", user, msg.author, reason, msg.guild, dur);
             });
         }else{
             errContent = "you are not authorized to ban this person";
