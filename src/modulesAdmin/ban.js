@@ -7,17 +7,17 @@ module.exports = async (client, msg, content) => {
 
     const config = JSON.parse(fs.readFileSync(`${__dirname}/../config.json`, 'utf-8'));
 
-    let member = msg.mentions.members.first() || await msg.guild.members.fetch(content[1]);
+    let user = msg.mentions.users.first() || await client.users.fetch(content[1]);
 
-    if(member.id){
-        if(member.bannable){
+    if(user){
+        if(await checkAuth(user)){
             var reason = false;
 
             var embed = new Discord.MessageEmbed()
             .setTitle("Ban")
-            .setThumbnail(member.user.avatarURL())
+            .setThumbnail(user.avatarURL())
             .setAuthor(`${msg.author.tag}`, msg.author.avatarURL())
-            .setFooter(member.id, client.user.avatarURL())
+            .setFooter(user.id, client.user.avatarURL())
             .setTimestamp(new Date());
 
             if(content[2]){
@@ -53,7 +53,7 @@ module.exports = async (client, msg, content) => {
                         let run = require(`${__dirname}/unban.js`);
                         run(client, msg, content, placeholder, true);
                     });
-                    var d = cron.job(`0 0 0 */${time} * *`, function(){
+                        var d = cron.job(`0 0 0 */${time} * *`, function(){
                         d.stop();
                         let run = require(`${__dirname}/unban.js`);
                         run(client, msg, content, placeholder, true);
@@ -82,13 +82,13 @@ module.exports = async (client, msg, content) => {
                 }
             }
 
-            await member.ban({reason: reason}).then(function(){
+           await msg.guild.members.ban(user.id, {reason: reason}).then(function(){
                 embed.setColor('0x34ad4c')
-                embed.setDescription(`Succesfully banned <@${member.id}>`);
+                embed.setDescription(`Succesfully banned <@${user.id}>`);
 
                 msg.channel.send(embed);
                 let dnot = require(`${__dirname}/../automatic/dmNotification.js`);
-                dnot.run(client, "banned", member, msg.author, reason, msg.guild, dur);
+                dnot.run(client, "banned", user, msg.author, reason, msg.guild, dur);
             });
         }else{
             errContent = "you are not authorized to ban this person";
@@ -99,9 +99,24 @@ module.exports = async (client, msg, content) => {
         error();
     }
 
+    async function checkAuth(user){
+        var res = false;
+
+        try{
+            let member = await msg.guild.members.fetch(user.id);
+            if(msg.author.roles.highest.position > member.roles.highest.position){
+                res = true;
+            }
+        }catch{
+            res = true;
+        }
+
+        return res;
+    }
+
     function error(){
         embed.setColor('0xd42828')
-        embed.setDescription(`Error during banning of <@${member.id}>`)
+        embed.setDescription(`Error during banning of <@${user.id}>`)
         embed.addField("Error", errContent);
 
         msg.channel.send(embed);
