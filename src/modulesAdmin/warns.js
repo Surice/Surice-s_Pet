@@ -18,7 +18,7 @@ module.exports = async (client, msg, content) => {
             .setAuthor(`${msg.author.tag}`, msg.author.avatarURL())
             .setFooter(member.id, client.user.avatarURL())
             .setTimestamp(new Date());
-            if(msg.member.roles.highest.position > member.roles.highest.position){
+            if(msg.member.roles.highest.position > member.roles.highest.position || msg.author.id == msg.guild.owner.id){
                 if(wSer[member.id]){
                     if(content[3] == "all"){
                         await delete wSer[member.id];
@@ -33,11 +33,11 @@ module.exports = async (client, msg, content) => {
                     }
                     fs.writeFileSync(`${__dirname}/../stor/warns.json`, JSON.stringify(warns));
                 }else{
-                    errContent = "You are not authorized to delete warns from this person";
+                    errContent = "User not warned";
                     error();
                 }
             }else{
-                errContent = "User not warned";
+                errContent = "You are not authorized to delete warns from this person";
                 error();
             }
         }else{
@@ -88,7 +88,7 @@ module.exports = async (client, msg, content) => {
 
     function error(){
         embed.setColor('0xd42828')
-        embed.setDescription(`Error during remove Warn of <@${member.id}>`)
+        embed.setDescription(`Error during remove Warn of ${content[2]}`)
         embed.addField("Error", errContent);
 
         msg.channel.send(embed);

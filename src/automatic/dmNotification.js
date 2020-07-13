@@ -4,6 +4,7 @@ module.exports = (client, process, user, mod, reason, server, time) => {
     var embed = new Discord.MessageEmbed()
     .setTitle(process)
     .setThumbnail(server.iconURL())
+    .setColor('0xc22a1f')
     .setAuthor(mod.tag, mod.avatarURL())
     .setDescription(`you were ${process} ${server.name}`)
     .addField("Reason:", reason)
