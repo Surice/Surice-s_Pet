@@ -26,6 +26,9 @@ module.exports = (client, msg, content, permissions) =>{
         },{
             name: "Cat",
             value: `description: sends an Random Cat Picture \nSyntax: ${config.prefix}cat`,
+        },{
+            name: "Avatar",
+            value: `description: Displays the Avatar of an User \nSyntax: ${config.prefix}avatar (@user/user id)`,
         }]
     }});
 
