@@ -29,6 +29,9 @@ module.exports = (client, msg, content, permissions) =>{
         },{
             name: "Avatar",
             value: `description: Displays the Avatar of an User \nSyntax: ${config.prefix}avatar (@user/user id)`,
+        },{
+            name: "Ask",
+            value: `description: answers the asked question \nSyntax: ${config.prefix}ask <Question>`,
         }]
     }});
 
