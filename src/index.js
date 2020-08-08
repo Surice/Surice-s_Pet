@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const fs = require("fs");
 const nodemailer = require('nodemailer');
 const cron = require('cron');
+const { request } = require('http');
 
 const config = JSON.parse(fs.readFileSync(`${__dirname}/config.json`,'utf-8'));
 
@@ -39,13 +40,13 @@ client.on('ready', ()=>{
     console.log("---------------------------\n");
 
     client.user.setStatus("idle");
-    client.user.setActivity("for Preifx: $$$", {type: "WATCHING"});
+    client.user.setActivity(`for Preifx: ${config.prefix}`, {type: "WATCHING"});
 
     run = require(`${__dirname}/automatic/monitoring`);
     run(client, fs, cron, mail, mailOptions);
 });
 
-client.on('guildMemberUpdate', function (guild, oldguild){
+client.on('guildMemberUpdate', (guild, oldguild) => {
     if(guild.user.id == myuser && oldguild.nickname != unick){
        setnick(guild);
     }else{
@@ -59,14 +60,24 @@ client.on('guildMemberAdd', member => {
     }
 });
 
-client.on('voiceStateUpdate', (oldMember, newMember)=>{    
-    if(){
+client.on('voiceStateUpdate', (oldMember, newMember) => {    
+    //everytime false!
+    if(1 == 2){
         let run = require(`${__dirname}/modulesOwner/checkChannel.js`);
         run(oldMember, newMember);
     }
 });
 
-client.on('message', (msg)=>{
+client.on('messageReactionAdd', (react, member) => {
+    let run = require(`${__dirname}/modulesOwner/close.js`);
+    run(client, false, false, react, member, "add");
+});
+client.on('messageReactionRemove', (react, member) => {
+    let run = require(`${__dirname}/modulesOwner/close.js`);
+    run(client, false, false, react, member, "rm");
+});
+
+client.on('message', (msg) => {
 	if(msg.channel.type == "dm"){
         let runfile = require(`${__dirname}/automatic/dmredirection.js`);
         runfile(client,msg);
@@ -75,23 +86,19 @@ client.on('message', (msg)=>{
             errorLog = String;
 
         if(msg.content.startsWith(config.prefix)){
-            console.log("Prefix detected!");
 
             if(authorized(msg).includes("everyone")){
                 try{
-                    console.log("try run command");
                     let filerun = require(`${__dirname}/modules/${content[0]}.js`)
                     filerun(client, msg, content, authorized(msg));
                 }catch(err){
                     if(authorized(msg).includes("admin")){
                         try{
-                            console.log("try run admin command");
                             let filerun = require(`${__dirname}/modulesAdmin/${content[0]}.js`)
                             filerun(client, msg, content, authorized(msg));
                         }catch(err){
                             if(authorized(msg).includes("owner")){
                                 try{
-                                    console.log("try run owner command");
                                     let filerun = require(`${__dirname}/modulesOwner/${content[0]}.js`)
                                     filerun(client, msg, content, authorized(msg));
                                 }catch(err){             
