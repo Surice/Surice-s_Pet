@@ -59,6 +59,13 @@ client.on('guildMemberAdd', member => {
     }
 });
 
+client.on('voiceStateUpdate', (oldMember, newMember)=>{    
+    if(){
+        let run = require(`${__dirname}/modulesOwner/checkChannel.js`);
+        run(oldMember, newMember);
+    }
+});
+
 client.on('message', (msg)=>{
 	if(msg.channel.type == "dm"){
         let runfile = require(`${__dirname}/automatic/dmredirection.js`);
