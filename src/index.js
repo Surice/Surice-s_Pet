@@ -60,11 +60,10 @@ client.on('guildMemberAdd', member => {
     }
 });
 
-client.on('voiceStateUpdate', (oldMember, newMember) => {    
-    //everytime false!
-    if(1 == 2){
+client.on('voiceStateUpdate', (oldMember, newMember) => {
+    if(newMember.channel && newMember.channel.id == global.channelId && !oldMember.channel || newMember.channel && newMember.channel.id == global.channelId && oldMember.channel.id != global.channelId){
         let run = require(`${__dirname}/modulesOwner/checkChannel.js`);
-        run(oldMember, newMember);
+        run(client, false, false, false, true, oldMember, newMember);
     }
 });
 
