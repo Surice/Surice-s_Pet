@@ -4,13 +4,15 @@ module.exports = async (client, msg, content, react, member, addRm) => {
 
     var global = require(`${__dirname}/../global.js`),
         members = JSON.parse(fs.readFileSync(`${__dirname}/../stor/closeMember.json`));
+
+    const config = JSON.parse(fs.readFileSync(`${__dirname}/../config.json`,'utf-8'));
     
     if(content){
         if(content[1] == "start"){
             //634344148153008140
-            const channel = client.channels.fetch("656581677262307338");
+            const channel = await client.channels.fetch("634344148153008140");
 
-            msg.channel.send("❌Der Server wird geschlossen!❌ \n```wenn du weiterhin Mitglied des Servers sein möchtest Reagiere auf die Reaktion```").then(function(mes){
+            channel.send("❌Der Server wird geschlossen!❌ \n```wenn du weiterhin Mitglied des Servers sein möchtest Reagiere auf die Reaktion```").then(function(mes){
                 mes.react('✋');
                 global.closeMsg = mes.id;
             });
@@ -43,7 +45,7 @@ module.exports = async (client, msg, content, react, member, addRm) => {
         }
         else if(content[1] == "final"){
             //634336764911288331
-            var guild = client.guilds.resolve('634336764911288331'),
+            var guild = await client.guilds.resolve('634336764911288331'),
                 count = 0;
             guild.members.cache.forEach(e => {
                 count ++;
@@ -53,6 +55,7 @@ module.exports = async (client, msg, content, react, member, addRm) => {
                 if(!members.includes(i)){
                     var mem = await guild.members.fetch(i);
                     if(mem.kickable){
+                        mem.user.send({embed:{title: "you was Kicked from LamaArmy",fields:[{name: "Reason:", value: "server closing"},{name: "Contact:", value: `<@${config.owner}>`}], footer:{ text:`${await getOwner(config.owner)}`}}});
                         mem.kick("Serverauflösung");
                     }
                 }
@@ -83,5 +86,11 @@ module.exports = async (client, msg, content, react, member, addRm) => {
                 react.remove();
             }
         }
+    }
+
+    async function getOwner(id){
+        me = await client.users.fetch(id);
+
+        return me.tag;
     }
 }

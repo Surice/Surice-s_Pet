@@ -28,7 +28,7 @@ var mail = nodemailer.createTransport({
     }),
     mailOptions = {
         from: 'Bot-Status@sebastian-web.de',
-	    to: 'sesi.ulrich@gmail.com',
+	    to: config.ownerMail,
 	    subject: '',
 	    text: ''
     };
@@ -43,7 +43,7 @@ client.on('ready', ()=>{
     client.user.setActivity(`for Preifx: ${config.prefix}`, {type: "WATCHING"});
 
     run = require(`${__dirname}/automatic/monitoring`);
-    run(client, fs, cron, mail, mailOptions);
+//    run(client, fs, cron, mail, mailOptions);
 });
 
 client.on('guildMemberUpdate', (guild, oldguild) => {
