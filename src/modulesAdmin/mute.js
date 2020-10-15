@@ -26,6 +26,13 @@ module.exports = async (client, msg, content) => {
 
 
             if(msg.member.roles.highest.position > member.roles.highest.position || msg.author.id == msg.guild.owner.id){
+                if(msg.member.id == member.id){
+                    errContent = "You cannot mute yourself";
+                    error(member);
+                    return;
+                }
+
+
                 if(content[2]){
                     var time = false;
                     if(/^\d+$/.test(content[2].slice(0,-1))){

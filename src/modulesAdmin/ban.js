@@ -9,16 +9,16 @@ module.exports = async (client, msg, content) => {
 
     let user = msg.mentions.users.first() || await client.users.fetch(content[1]);
 
+    var embed = new Discord.MessageEmbed()
+    .setTitle("Ban")
+    .setThumbnail(user.avatarURL())
+    .setAuthor(`${msg.author.tag}`, msg.author.avatarURL())
+    .setFooter(user.id, client.user.avatarURL())
+    .setTimestamp(new Date());
+
     if(user){
         if(await checkAuth(user)){
             var reason = false;
-
-            var embed = new Discord.MessageEmbed()
-            .setTitle("Ban")
-            .setThumbnail(user.avatarURL())
-            .setAuthor(`${msg.author.tag}`, msg.author.avatarURL())
-            .setFooter(user.id, client.user.avatarURL())
-            .setTimestamp(new Date());
 
             if(content[2]){
                 var time = false,
@@ -91,6 +91,12 @@ module.exports = async (client, msg, content) => {
                 dnot(client, "banned from", user, msg.author, reason, msg.guild, dur);
             });
         }else{
+            if(msg.member.id == user.id){
+                errContent = "You cannot ban yourself";
+                error();
+                return;
+            }
+
             errContent = "you are not authorized to ban this person";
             error();
         }
@@ -108,7 +114,7 @@ module.exports = async (client, msg, content) => {
                 res = true;
             }
         }catch{
-            res = true;
+            res = false;
         }
 
         return res;
@@ -116,8 +122,8 @@ module.exports = async (client, msg, content) => {
 
     function error(){
         embed.setColor('0xd42828')
-        embed.setDescription(`Error during banning of <@${user.id}>`)
-        embed.addField("Error", errContent);
+        .setDescription(`Error during banning of <@${user.id}>`)
+        .addField("Error", errContent);
 
         msg.channel.send(embed);
     }

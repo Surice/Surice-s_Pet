@@ -26,6 +26,12 @@ module.exports = async (client, msg, content) => {
         }
     
         if(msg.member.roles.highest.position > member.roles.highest.position || msg.author.id == msg.guild.owner.id){
+            if(msg.member.id == member.id){
+                errContent = "You cannot warn yourself";
+                error();
+                return;
+            }
+
             if(!warns[server]){
                 warns[server] = new Object();
             }

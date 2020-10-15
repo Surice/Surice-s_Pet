@@ -141,7 +141,7 @@ function authorized(msg){
         response.push("admin");
         response.push("everyone");
     }
-    //DOESNT WORK RIGHT NOW! need an if clause for "user has role bot-command and check if the role has admin rights"
+
     else if(msg.member.hasPermission('ADMINISTRATOR')){
         response.push("admin");
         response.push("everyone");
@@ -153,6 +153,7 @@ function authorized(msg){
 }
 
 
+//Client Login and Error handeling
 try{
     client.login(config.token);
 }catch(err){

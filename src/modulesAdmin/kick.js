@@ -31,6 +31,12 @@ module.exports = async (client, msg, content) => {
                 dnot(client, "Kicked from", member, msg.author, reason, msg.guild, null);
             });
         }else{
+            if(msg.member.id == member.id){
+                errContent = "You cannot warn yourself";
+                error();
+                return;
+            }
+            
             errContent = "you are not authorized to kick this person";
             error();
         }
