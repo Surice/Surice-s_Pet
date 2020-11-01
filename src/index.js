@@ -68,8 +68,13 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
 });
 
 client.on('messageReactionAdd', (react, member) => {
-    let run = require(`${__dirname}/modulesOwner/close.js`);
-    run(client, false, false, react, member, "add");
+    if(react.message.channel.type == "dm"){
+        let run = require(`${__dirname}/modulesOwner/checkChannel.js`);
+        run(client, false, false, false, false, false, member, react);
+    }else{
+        let run = require(`${__dirname}/modulesOwner/close.js`);
+        run(client, false, false, react, member, "add");
+    }
 });
 client.on('messageReactionRemove', (react, member) => {
     let run = require(`${__dirname}/modulesOwner/close.js`);

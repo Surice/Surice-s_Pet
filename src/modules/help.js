@@ -13,7 +13,7 @@ module.exports = (client, msg, content, permissions) =>{
         },fields:
         [{
             name: "Search",
-            value: `description: returns an Information about the founded user \nSyntax: ${config.prefix}search <@user>/<user name>/<user id>`,
+            value: `description: returns an Information about the found users \nSyntax: ${config.prefix}search <@user>/<user name>/<user id>`,
         },{
             name: "Meme",
             value: `description: sends an random Meme \nSyntax: ${config.prefix}meme`,
@@ -32,6 +32,9 @@ module.exports = (client, msg, content, permissions) =>{
         },{
             name: "Ask",
             value: `description: answers the asked question \nSyntax: ${config.prefix}ask <Question>`,
+        },{
+            name: "Serverinfo",
+            value: `description: Display an Information about the Server \nSyntax: ${config.prefix}serverinfo <server id>`,
         }]
     }});
 

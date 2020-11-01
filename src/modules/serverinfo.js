@@ -4,8 +4,26 @@ module.exports = async (client, msg, content) => {
 
     const config = JSON.parse(fs.readFileSync(`${__dirname}/../config.json`,'utf-8'));
 
-    const server = msg.guild;
+    var server;
+    if(content[1]){
+        server = await client.guilds.cache.get(content[1]);
+    }else{
+        server = msg.guild;
+    }
 
+    if(!server){
+        var errEmbed = new Discord.MessageEmbed()
+        .setTitle("Serverinfo")
+        .setDescription(`Error during obtain Server data`)
+        .setColor('0xd42828')
+        .setAuthor(msg.author.tag, msg.author.avatarURL())
+        .addField("Error", "Cannot get Unknow Guild")
+        .setFooter(client.user.tag, client.user.avatarURL())
+        .setTimestamp(new Date());
+
+        msg.channel.send(errEmbed);
+        return;
+    }
 
     var embed = new Discord.MessageEmbed()
     .setTitle(server.name)
@@ -134,7 +152,7 @@ function getFeatures(server){
         e = formatString(e);
         out += `${e} \n`;
     });
-
+    if(out == "") out = "--none--";
     return out;
 }
 

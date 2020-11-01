@@ -4,9 +4,10 @@ const config = JSON.parse(fs.readFileSync(`${__dirname}/config.json`,'utf-8'));
 
 var nick = config.selfid,
     unick = null,
-    channelId = 510370517824438282,
+    channelId = '510370517824438282',
+    targetId = '293373053059203072',
     closeMsg = null;
 
 module.exports = {
-    nick, unick, channelId, closeMsg
+    nick, unick, channelId, targetId, closeMsg
 }
