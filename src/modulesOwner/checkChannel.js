@@ -1,4 +1,4 @@
-module.exports = async (client, msg, content, placeholder, check, oldMember, newMember, react) => {
+module.exports = async (client, msg, content, placeholder, check, oldMember, newMember, react, cron) => {
     const fs = require('fs');
 
     const config = JSON.parse(fs.readFileSync(`${__dirname}/../config.json`,));
@@ -29,16 +29,26 @@ module.exports = async (client, msg, content, placeholder, check, oldMember, new
             const guild = chan.guild
             const member = guild.members.cache.get(content[0]);
 
+            react.message.delete();
+            if(!member.voice.channelID) return;
+
             if(react.emoji.name == '✅'){                
                 member.voice.setChannel(chan);
             }else if(react.emoji.name == '❌'){
                 member.voice.kick();
 
                 wChan.createOverwrite(member, {
-                    'CONNECT_CHANNEL': false
+                    'CONNECT': false
+                }).then(() => {
+                    var j = cron.job('* */5 * * * *', function(){
+                        wChan.createOverwrite(member, {
+                            'CONNECT': true
+                        });
+                    });
+
+                    j.start();
                 });
             }
-            react.message.delete();
         }
     }
 }

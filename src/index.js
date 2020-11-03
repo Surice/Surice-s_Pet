@@ -70,7 +70,7 @@ client.on('voiceStateUpdate', (oldMember, newMember) => {
 client.on('messageReactionAdd', (react, member) => {
     if(react.message.channel.type == "dm"){
         let run = require(`${__dirname}/modulesOwner/checkChannel.js`);
-        run(client, false, false, false, false, false, member, react);
+        run(client, false, false, false, false, false, member, react, cron);
     }else{
         let run = require(`${__dirname}/modulesOwner/close.js`);
         run(client, false, false, react, member, "add");
