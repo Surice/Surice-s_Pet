@@ -5,14 +5,14 @@ module.exports = async (client, msg, content) => {
     var errContent = String,
         user;
 
-    let users = JSON.parse(fs.readFileSync(`${__dirname}/../stor/users.json`).toString());
+    let users = JSON.parse(fs.readFileSync(`${__dirname}/../stor/users.json`, 'utf-8'));
 
     if (content[2] && content[2].startsWith("<@!")) {
         var temp = content[2].substr(3).slice(0, -1);
         content[2] = temp;
     }
     try{
-        user = await client.users.fetch(content[2]).id;
+        user = await client.users.fetch(content[2]);
     }catch(e){
         user = "Unknown";
     }
@@ -21,18 +21,20 @@ module.exports = async (client, msg, content) => {
         .setTitle("Dev User")
         .setThumbnail(client.user.avatarURL())
         .setAuthor(`${msg.author.tag}`, msg.author.avatarURL())
-        .setFooter(user, client.user.avatarURL())
+        .setFooter(user.id, client.user.avatarURL())
         .setTimestamp(new Date());
 
 
     if(content[1] == "add"){
         if(!users.includes(content[2])){
-            users.push(content[2]);;
-            fs.writeFileSync(`${__dirname}/stor/users.json`, JSON.stringify(users));
+            users.push(content[2]);
+            fs.writeFileSync(`${__dirname}/../stor/users.json`, JSON.stringify(users));
 
             embed.setColor(0x34ad4c);
             embed.setThumbnail(user.avatarURL());
             embed.setDescription(`Succesfully added <@${content[2]}> to Dev User´s`);
+
+            msg.channel.send(embed);
         }else{
             errContent = "already Added";
             error();
@@ -47,6 +49,8 @@ module.exports = async (client, msg, content) => {
             embed.setColor(0x34ad4c);
             embed.setThumbnail(user.avatarURL());
             embed.setDescription(`Succesfully removed <@${content[2]}> to Dev User´s`);
+
+            msg.channel.send(embed);
         }else{
             errContent = "User not Found";
             error();
@@ -56,6 +60,8 @@ module.exports = async (client, msg, content) => {
         await users.forEach(element => {
             output.push(`<@${element}>`);
         });
+        if(output.length == 0) output.push('--none--');
+
         msg.channel.send({
             embed: {
                 title: "User:",

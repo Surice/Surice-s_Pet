@@ -1,10 +1,14 @@
 const Discord = require('discord.js');
 const fs = require("fs");
 
+const express = require('express');
+const { RSA_NO_PADDING } = require('constants');
+const app = express();
+
 const config = JSON.parse(fs.readFileSync(`${__dirname}/config.json`,'utf-8'));
+const auth = require(`${__dirname}/automatic/auth.js`);
 
 
-let users = JSON.parse(fs.readFileSync(`${__dirname}/stor/users.json`).toString());
 let channels = JSON.parse(fs.readFileSync(`${__dirname}/stor/channels.json`).toString());
 let mutes = JSON.parse(fs.readFileSync(`${__dirname}/stor/muteUsers.json`).toString());
 
@@ -37,23 +41,23 @@ client.on('message', (msg) => {
         let runfile = require(`${__dirname}/automatic/dmredirection.js`);
         runfile(client,msg);
 	}else{        
-        const content = msg.content.substr(config.prefix.lengh).split(' ');
+        const content = msg.content.substr(config.prefix.length).split(' ');
 
         if(msg.content.startsWith(config.prefix)){
-            if(authorized(msg).includes("everyone")){
+            if(auth.authorized(msg).includes("everyone")){
                 try{
-                    let filerun = require(`${__dirname}/modules/${content[0]}.js`)
-                    filerun(client, msg, content, authorized(msg));
+                    let filerun = require(`${__dirname}/modules/${content[0]}.js`);
+                    filerun(client, msg, content, auth.authorized(msg));
                 }catch(err){
-                    if(authorized(msg).includes("admin")){
+                    if(auth.authorized(msg).includes("admin")){
                         try{
-                            let filerun = require(`${__dirname}/modulesAdmin/${content[0]}.js`)
-                            filerun(client, msg, content, authorized(msg));
+                            let filerun = require(`${__dirname}/modulesAdmin/${content[0]}.js`);
+                            filerun(client, msg, content, auth.authorized(msg));
                         }catch(err){
-                            if(authorized(msg).includes("owner")){
+                            if(auth.authorized(msg).includes("owner")){
                                 try{
-                                    let filerun = require(`${__dirname}/modulesOwner/${content[0]}.js`)
-                                    filerun(client, msg, content, authorized(msg));
+                                    let filerun = require(`${__dirname}/modulesOwner/${content[0]}.js`);
+                                    filerun(client, msg, content, auth.authorized(msg));
                                 }catch(err){             
                                     //if no owner command found
                                     if(err.code == 'MODULE_NOT_FOUND'){
@@ -85,23 +89,39 @@ client.on('message', (msg) => {
 });
 
 
-//checks the access permission of the user
-function authorized(msg){
-    var response = new Array(),
-        serverName = msg.guild.name;
-
-    if(msg.author.id == config.owner || users.includes(msg.author.id)){
-        response.push("owner", "admin", "everyone");
-    }
-    else if(msg.member.hasPermission('ADMINISTRATOR')){
-        response.push("admin", "everyone");
-    }
-    else if(channels[serverName].includes(msg.channel.id)){
-        response.push("everyone");
-    }
-
-    return response;
-}
-
 
 client.login(config.token);
+
+
+app.use(express.json());
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requestet-With, Content-Type, Accept, Authorization");
+    next();
+});
+
+app.get('/test', (req, res) => {
+    res.send("OK");
+})
+
+app.post('/login-auth', async (req, res) => {
+    const data = {
+        token: req.body.auth,
+        id: req.body.id,
+        guildId: req.body.gid
+    }
+
+    if(data.token != config.frontend_auth_token){
+        res.status(401).json({ status: false });
+        return;
+    }
+
+    let authRes = await auth.checkLoginPerms(data, client);
+
+    if(authRes) res.json({ status: true, role: authRes });
+});
+
+
+app.listen(config.backend_port, function(){
+    console.log(`express listen on port ${config.backend_port} \n`);
+});
