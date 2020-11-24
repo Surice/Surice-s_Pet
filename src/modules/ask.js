@@ -4,8 +4,8 @@ module.exports = async (client, msg, content) => {
         1: new Array("Nein", "Nie im Leben", "Vergiss es"),
         2: new Array("Vielleicht", "mir egal", "Entscheide selbst"),
     }
-    var choose = Math.floor(Math.random() * 3),
+    let choose = Math.floor(Math.random() * 3),
         items = answer[choose];
 
-    msg.channel.send(item[Math.floor(Math.random()*items.length)]);
+    msg.channel.send(items[Math.floor(Math.random()*items.length)]);
 }

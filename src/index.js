@@ -1,37 +1,16 @@
 const Discord = require('discord.js');
 const fs = require("fs");
-const nodemailer = require('nodemailer');
-const cron = require('cron');
-const { request } = require('http');
 
 const config = JSON.parse(fs.readFileSync(`${__dirname}/config.json`,'utf-8'));
 
-var users = JSON.parse(fs.readFileSync(`${__dirname}/stor/users.json`).toString());
-var channels = JSON.parse(fs.readFileSync(`${__dirname}/stor/channels.json`).toString());
+
+let users = JSON.parse(fs.readFileSync(`${__dirname}/stor/users.json`).toString());
+let channels = JSON.parse(fs.readFileSync(`${__dirname}/stor/channels.json`).toString());
 let mutes = JSON.parse(fs.readFileSync(`${__dirname}/stor/muteUsers.json`).toString());
 
 
-var global = require(`${__dirname}/global.js`);
+let client = new Discord.Client();
 
-var client = new Discord.Client(),
-    myuser = global.myuser,
-    unick = global.unick;
-
-var mail = nodemailer.createTransport({
-    host: 'smtp.strato.de',
-	port: 465,
-	secure: true,
-    auth: {
-        user: config.mailUser,
-        pass: config.mailPass
-    }
-    }),
-    mailOptions = {
-        from: 'Bot-Status@sebastian-web.de',
-	    to: config.ownerMail,
-	    subject: '',
-	    text: ''
-    };
 
 console.log("Loading...");
 client.on('ready', ()=>{
@@ -41,56 +20,26 @@ client.on('ready', ()=>{
 
     client.user.setStatus("idle");
     client.user.setActivity(`for Preifx: ${config.prefix}`, {type: "WATCHING"});
-
-    run = require(`${__dirname}/automatic/monitoring`);
-//    run(client, fs, cron, mail, mailOptions);
 });
 
-client.on('guildMemberUpdate', (guild, oldguild) => {
-    if(guild.user.id == myuser && oldguild.nickname != unick){
-       setnick(guild);
-    }else{
-    }
-});
+
 client.on('guildMemberAdd', member => {
     const server = member.guild;
+
     if(mutes[server] && mutes[server].includes(member.id)){
         let role = server.roles.cache.find(e => e.name == config.muteRoleName);
         member.roles.add(role);
     }
 });
 
-client.on('voiceStateUpdate', (oldMember, newMember) => {
-    if(newMember.channel && newMember.channel.id == global.channelId && !oldMember.channel || newMember.channel && newMember.channel.id == global.channelId && oldMember.channel.id != global.channelId){
-        let run = require(`${__dirname}/modulesOwner/checkChannel.js`);
-        run(client, false, false, false, true, oldMember, newMember);
-    }
-});
-
-client.on('messageReactionAdd', (react, member) => {
-    if(react.message.channel.type == "dm"){
-        let run = require(`${__dirname}/modulesOwner/checkChannel.js`);
-        run(client, false, false, false, false, false, member, react, cron);
-    }else{
-        let run = require(`${__dirname}/modulesOwner/close.js`);
-        run(client, false, false, react, member, "add");
-    }
-});
-client.on('messageReactionRemove', (react, member) => {
-    let run = require(`${__dirname}/modulesOwner/close.js`);
-    run(client, false, false, react, member, "rm");
-});
-
 client.on('message', (msg) => {
 	if(msg.channel.type == "dm"){
         let runfile = require(`${__dirname}/automatic/dmredirection.js`);
         runfile(client,msg);
-	}else{
-        const content = msg.content.substr(config.prefixlengh).split(' '),
-            errorLog = String;
+	}else{        
+        const content = msg.content.substr(config.prefix.lengh).split(' ');
 
         if(msg.content.startsWith(config.prefix)){
-
             if(authorized(msg).includes("everyone")){
                 try{
                     let filerun = require(`${__dirname}/modules/${content[0]}.js`)
@@ -139,41 +88,20 @@ client.on('message', (msg) => {
 //checks the access permission of the user
 function authorized(msg){
     var response = new Array(),
-        server = msg.guild.name;
+        serverName = msg.guild.name;
 
-    if(msg.author.id == config.owner || msg.author.id == config.owner2 || users.includes(msg.author.id)){
-        response.push("owner");
-        response.push("admin");
-        response.push("everyone");
+    if(msg.author.id == config.owner || users.includes(msg.author.id)){
+        response.push("owner", "admin", "everyone");
     }
-
     else if(msg.member.hasPermission('ADMINISTRATOR')){
-        response.push("admin");
+        response.push("admin", "everyone");
+    }
+    else if(channels[serverName].includes(msg.channel.id)){
         response.push("everyone");
     }
-    else if(channels[server].includes(msg.channel.id)){
-        response.push("everyone");
-    }
+
     return response;
 }
 
 
-//Client Login and Error handeling
-try{
-    client.login(config.token);
-}catch(err){
-    console.log(err);
-    mailOptions.subject = "an error was detected";
-    mailOptions.text =  `Unknown Error \n\nERROR: \n${err}`;
-
-    if(err.code == 'EAI_AGAIN' || err.code == 'ETIMEDOUT'){
-        mailOptions.text = `an Connection Timeout was detected! \n\nERROR: \n${err}`;
-        console.log(`------------------------\n>CONNECTION ERROR DETECTED<\n------------------------`);
-        setTimeout(function(){
-            client.login(config.token)
-        }, 30000);
-    }
-    mail.sendMail(mailOptions, function(error, info){
-        console.log(info);
-    });
-}
+client.login(config.token);
