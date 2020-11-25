@@ -9,11 +9,15 @@ const surveyRouter = require(`${__dirname}/router/survey`);
 
 const config = JSON.parse(fs.readFileSync(`${__dirname}/config.json`,'utf-8'));
 
+let global = require(`${__dirname}/global`);
+
 
 let client = new Discord.Client();
 
 console.log("Loading...");
-client.on('ready', ()=>{
+client.on('ready', () => {
+    global.startedAt = Date.now();
+
     let run = require(`${__dirname}/eventHandle/ready`);
     run(client);
 });
@@ -43,3 +47,17 @@ app
 app.listen(config.backend_port, () => {
     console.log(`express listen on port: ${config.backend_port} \n`);
 });
+
+
+function getClientInfos(){
+    let res = {
+        name: client.user.tag,
+        ceatedAt: client.user.createdAt,
+        serverCount: client.guilds.cache.size,
+        uptime: client.uptime
+    }
+
+    return res;
+}
+
+exports.index = { getClientInfos };
