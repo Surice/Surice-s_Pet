@@ -9,12 +9,12 @@ module.exports = async (client, msg, content) => {
 
     let user = msg.mentions.users.first() || await client.users.fetch(content[1]);
 
-    var embed = new Discord.MessageEmbed()
-    .setTitle("Ban")
-    .setThumbnail(user.avatarURL())
-    .setAuthor(`${msg.author.tag}`, msg.author.avatarURL())
-    .setFooter(user.id, client.user.avatarURL())
-    .setTimestamp(new Date());
+    let embed = new Discord.MessageEmbed()
+        .setTitle("Ban")
+        .setThumbnail(user.avatarURL())
+        .setAuthor(`${msg.author.tag}`, msg.author.avatarURL())
+        .setFooter(user.id, client.user.avatarURL())
+        .setTimestamp(new Date());
 
     if(user){
         if(await checkAuth(user)){
