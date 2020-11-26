@@ -25,7 +25,7 @@ function authorized(msg){
 async function checkLoginPerms(data, client){
     let guild = await client.guilds.cache.get(data.guildId);
 
-    let member = await guild.members.cache.get(data.id);
+    let member = await guild.members.fetch(data.id);
 
     if(data.id == config.owner || users.includes(data.id)){
         return "owner";

@@ -1,6 +1,8 @@
 const fs = require("fs");
 const Discord = require('discord.js');
 
+let client = new Discord.Client();
+module.exports =  client;
 const express = require('express');
 const app = express();
 
@@ -11,8 +13,6 @@ const config = JSON.parse(fs.readFileSync(`${__dirname}/config.json`,'utf-8'));
 
 let global = require(`${__dirname}/global`);
 
-
-let client = new Discord.Client();
 
 console.log("Loading...");
 client.on('ready', () => {
@@ -30,7 +30,6 @@ client.on('message', (msg) => {
     run(client, msg);
 });
 client.login(config.token);
-
 
 app
     .use(express.json())

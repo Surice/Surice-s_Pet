@@ -5,6 +5,7 @@ const router = express.Router();
 const config = JSON.parse(fs.readFileSync(`${__dirname}/../config.json`,'utf-8'));
 const auth = require(`${__dirname}/../automatic/auth`);
 const statusService = require(`${__dirname}/../services/status.service`);
+const client = require(`${__dirname}/../index`);
 
 router.get('/test', (req, res) => {
     res.send("OK");
