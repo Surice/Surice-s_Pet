@@ -5,7 +5,7 @@ let users = JSON.parse(fs.readFileSync(`${__dirname}/../stor/users.json`, 'utf-8
 
 //checks the access permission of the user
 function authorized(msg){
-    var response = new Array(),
+    let response = new Array(),
         serverName = msg.guild.name;
 
     if(msg.author.id == config.owner || users.includes(msg.author.id)){

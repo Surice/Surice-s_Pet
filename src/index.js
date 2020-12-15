@@ -2,7 +2,8 @@ const fs = require("fs");
 const Discord = require('discord.js');
 
 let client = new Discord.Client();
-module.exports =  client;
+module.exports = { client };
+
 const express = require('express');
 const app = express();
 
@@ -11,16 +12,13 @@ const surveyRouter = require(`${__dirname}/router/survey`);
 
 const config = JSON.parse(fs.readFileSync(`${__dirname}/config.json`,'utf-8'));
 
-let global = require(`${__dirname}/global`);
-
 
 console.log("Loading...");
 client.on('ready', () => {
-    global.startedAt = Date.now();
-
     let run = require(`${__dirname}/eventHandle/ready`);
     run(client);
 });
+
 client.on('guildMemberAdd', member => {
     let run = require(`${__dirname}/eventHandle/guildMemberAdd`);
     run(client, member);
@@ -29,6 +27,11 @@ client.on('message', (msg) => {
     let run = require(`${__dirname}/eventHandle/message`);
     run(client, msg);
 });
+client.on('voiceStateUpdate', (oldState, newState) => {
+    let run = require(`${__dirname}/eventHandle/voiceStateUpdate`);
+    run(client, oldState, newState);
+})
+
 client.login(config.token);
 
 app
@@ -46,17 +49,3 @@ app
 app.listen(config.backend_port, () => {
     console.log(`express listen on port: ${config.backend_port} \n`);
 });
-
-
-function getClientInfos(){
-    let res = {
-        name: client.user.tag,
-        ceatedAt: client.user.createdAt,
-        serverCount: client.guilds.cache.size,
-        uptime: client.uptime
-    }
-
-    return res;
-}
-
-exports.index = { getClientInfos };

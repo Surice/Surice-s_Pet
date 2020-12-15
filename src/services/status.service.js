@@ -1,21 +1,14 @@
-const fs = require('fs');
 const os = require('os');
 
-const config = JSON.parse(fs.readFileSync(`${__dirname}/../config.json`, 'utf-8'));
-
-const indexFile = require(`${__dirname}/../index`);
-
-let global = require(`${__dirname}/../global`);
+const index = require(`${__dirname}/../index`);
 
 async function collectData(){
-    let clientData = indexFile.index.getClientInfos();
-
     let data = {
         client: {
-            uptime: Math.floor(clientData.uptime / 1000),
-            createdAt: clientData.createdAt,
-            name: clientData.name,
-            serverCount: clientData.serverCount
+            uptime: Math.floor(index.client.uptime / 1000),
+            createdAt: index.client.user.createdAt,
+            name: index.client.user.tag,
+            serverCount: index.client.guilds.cache.size
         },
         host: {
             hostname: os.hostname(),

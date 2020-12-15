@@ -4,7 +4,7 @@ module.exports = async (client, msg, content) => {
 
     const config = JSON.parse(fs.readFileSync(`${__dirname}/../config.json`,'utf-8'));
 
-    var server;
+    let server;
     if(content[1]){
         server = await client.guilds.cache.get(content[1]);
     }else{
@@ -12,7 +12,7 @@ module.exports = async (client, msg, content) => {
     }
 
     if(!server){
-        var errEmbed = new Discord.MessageEmbed()
+        let errEmbed = new Discord.MessageEmbed()
         .setTitle("Serverinfo")
         .setDescription(`Error during obtain Server data`)
         .setColor('0xd42828')
@@ -25,7 +25,7 @@ module.exports = async (client, msg, content) => {
         return;
     }
 
-    var embed = new Discord.MessageEmbed()
+    let embed = new Discord.MessageEmbed()
     .setTitle(server.name)
     .setColor('0x7d0099')
     .setThumbnail(server.iconURL())
@@ -100,7 +100,7 @@ function checkDescription(server){
 
 function getChannels(server, type){
     const channels = server.channels.cache.array();
-    var out = {
+    let out = {
         "voice": 0,
         "text": 0
     };
@@ -122,7 +122,7 @@ function getChannels(server, type){
 
 async function getMembers(server, type){
     const members = server.members.cache.array();
-    var out = {
+    let out = {
         "user": 0,
         "bot": 0,
     };
@@ -157,7 +157,7 @@ function getFeatures(server){
 }
 
 async function createTimeSort(server){
-    var response,
+    let response,
         days = new Array("Mon","Tue","Wed","Thu","Sat","Sun"),
         minute = server.createdAt.getMinutes(),
         hour = server.createdAt.getHours(),
