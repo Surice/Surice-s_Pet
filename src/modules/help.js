@@ -12,8 +12,8 @@ module.exports = (client, msg, content, permissions) =>{
             url: client.user.avatarURL(),
         },fields:
         [{
-            name: "Search",
-            value: `description: returns an Information about the found users \nSyntax: ${config.prefix}search <@user>/<user name>/<user id>`,
+            name: "userInfo",
+            value: `description: returns an Information about the found users \nSyntax: ${config.prefix}userinfo <@user>/<user name>/<user id>`,
         },{
             name: "Meme",
             value: `description: sends an random Meme \nSyntax: ${config.prefix}meme`,

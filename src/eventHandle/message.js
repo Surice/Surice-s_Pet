@@ -12,17 +12,17 @@ module.exports = (client, msg) => {
         if(msg.content.startsWith(config.prefix)){
             if(auth.authorized(msg).includes("everyone")){
                 try{
-                    let filerun = require(`${__dirname}/../modules/${content[0]}.js`);
+                    let filerun = require(`${__dirname}/../modules/${content[0].toLowerCase()}.js`);
                     filerun(client, msg, content, auth.authorized(msg));
                 }catch(err){
                     if(auth.authorized(msg).includes("admin")){
                         try{
-                            let filerun = require(`${__dirname}/../modulesAdmin/${content[0]}.js`);
+                            let filerun = require(`${__dirname}/../modulesAdmin/${content[0].toLowerCase()}.js`);
                             filerun(client, msg, content, auth.authorized(msg));
                         }catch(err){
                             if(auth.authorized(msg).includes("owner")){
                                 try{
-                                    let filerun = require(`${__dirname}/../modulesOwner/${content[0]}.js`);
+                                    let filerun = require(`${__dirname}/../modulesOwner/${content[0].toLowerCase()}.js`);
                                     filerun(client, msg, content, auth.authorized(msg));
                                 }catch(err){             
                                     //if no owner command found
