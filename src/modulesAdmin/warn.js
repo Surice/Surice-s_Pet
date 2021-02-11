@@ -30,7 +30,7 @@ module.exports = async (client, msg, content) => {
             if(msg.member.roles.highest.position > member.roles.highest.position || msg.author.id == msg.guild.owner.id){
                 if(msg.member.id == member.id){
                     errContent = "You cannot warn yourself";
-                    error();
+                    error(embed);
                     return;
                 }
 
@@ -56,15 +56,15 @@ module.exports = async (client, msg, content) => {
                 dnot(client, "Warned at", member, msg.author, reason, msg.guild, null);
             }else{
                 errContent = "You are unauthorized to warn this person";
-                error();
+                error(embed);
             }
         }else{
             errContent = "User not found";
-            error();
+            error(embed);
         }
     }else{
         errContent = `please make sure your server has an ${config.warnRoleName} role.`;
-        error();
+        error(embed);
     }
 
     function getIndex(li){
@@ -72,7 +72,7 @@ module.exports = async (client, msg, content) => {
         return response;
     }
 
-    function error(){
+    function error(embed){
         embed.setColor('0xd42828')
         embed.setDescription(`Error during Warning of <@${member.id}>`)
         embed.addField("Error", errContent);
