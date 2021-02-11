@@ -3,7 +3,7 @@ module.exports = async (client, msg, content) => {
 
     var errContent = String;
 
-    var embed = new Discord.MessageEmbed()
+    let embed = new Discord.MessageEmbed()
         .setTitle("Kick")
         .setThumbnail(client.user.avatarURL())
         .setAuthor(`${msg.author.tag}`, msg.author.avatarURL())

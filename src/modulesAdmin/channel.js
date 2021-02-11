@@ -40,6 +40,7 @@ module.exports = async (client, msg, content) => {
             fs.writeFileSync(`${__dirname}/../stor/channels.json`, JSON.stringify(channels));
             embed.setColor(0x34ad4c)
             embed.setDescription(`Succesfully added <#${content[2]}> to Bot-Channel´s`);
+            msg.channel.send(`Successfully Added ${content[2]}`);
         } else {
             errContent = "already added";
             error();
@@ -53,7 +54,7 @@ module.exports = async (client, msg, content) => {
             channels[server].splice(index, 1);; //remove index number of channel
 
             fs.writeFileSync(`${__dirname}/../stor/channels.json`, JSON.stringify(channels));
-            msg.channel.send("Successfully Removed");
+            msg.channel.send(`Successfully Removed ${content[2]}`);
         }else{
             errContent = "channel not found";
             error();
