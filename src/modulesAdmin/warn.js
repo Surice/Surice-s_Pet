@@ -10,52 +10,60 @@ module.exports = async (client, msg, content) => {
     const server = msg.guild;
 
     let member = msg.mentions.members.first() || await msg.guild.members.fetch(content[1]);
+    let role = server.roles.cache.find(e => e.name == config.warnRoleName);
 
-    if(member.id){
-        var reason = "no reason given";
+    if(role){
+        if(member.id){
+            var reason = "no reason given";
 
-        var embed = new Discord.MessageEmbed()
-        .setTitle("Warn")
-        .setThumbnail(member.user.avatarURL())
-        .setAuthor(`${msg.author.tag}`, msg.author.avatarURL())
-        .setFooter(member.id, client.user.avatarURL())
-        .setTimestamp(new Date());
+            var embed = new Discord.MessageEmbed()
+            .setTitle("Warn")
+            .setThumbnail(member.user.avatarURL())
+            .setAuthor(`${msg.author.tag}`, msg.author.avatarURL())
+            .setFooter(member.id, client.user.avatarURL())
+            .setTimestamp(new Date());
 
-        if(content[2]){
-            var reason = content.slice(2, reason.length).join(' ');
-        }
-    
-        if(msg.member.roles.highest.position > member.roles.highest.position || msg.author.id == msg.guild.owner.id){
-            if(msg.member.id == member.id){
-                errContent = "You cannot warn yourself";
-                error();
-                return;
+            if(content[2]){
+                var reason = content.slice(2, reason.length).join(' ');
             }
+        
+            if(msg.member.roles.highest.position > member.roles.highest.position || msg.author.id == msg.guild.owner.id){
+                if(msg.member.id == member.id){
+                    errContent = "You cannot warn yourself";
+                    error();
+                    return;
+                }
 
-            if(!warns[server]){
-                warns[server] = new Object();
-            }
-            var wSer = warns[server];
-            if(!(member.id in wSer)){
-                wSer[member.id] = new Array();
-            }
-            await wSer[member.id].push(new Array(reason, msg.author.id, await createTimeSort(), await getIndex(wSer[member.id])));
+                if(!warns[server]){
+                    warns[server] = new Object();
+                }
+                var wSer = warns[server];
+                if(!(member.id in wSer)){
+                    wSer[member.id] = new Array();
+                }
+                await wSer[member.id].push(new Array(reason, msg.author.id, await createTimeSort(), await getIndex(wSer[member.id])));
+                        
+                fs.writeFileSync(`${__dirname}/../stor/warns.json`, JSON.stringify(warns));
                     
-            fs.writeFileSync(`${__dirname}/../stor/warns.json`, JSON.stringify(warns));
-                
-            embed.addField("Reason", reason)
-            embed.setColor(0x34ad4c)
-            embed.setDescription(`Succesfully Warned <@${member.id}>`);
+                embed.addField("Reason", reason)
+                embed.setColor(0x34ad4c)
+                embed.setDescription(`Succesfully Warned <@${member.id}>`);
 
-            msg.channel.send(embed);
-            let dnot = require(`${__dirname}/../automatic/dmNotification.js`);
-            dnot(client, "Warned at", member, msg.author, reason, msg.guild, null);
+                msg.channel.send(embed);
+                let dnot = require(`${__dirname}/../automatic/dmNotification.js`);
+
+                member.roles.add(role);
+                dnot(client, "Warned at", member, msg.author, reason, msg.guild, null);
+            }else{
+                errContent = "You are unauthorized to warn this person";
+                error();
+            }
         }else{
-            errContent = "You are unauthorized to warn this person";
+            errContent = "User not found";
             error();
         }
     }else{
-        errContent = "User not found";
+        errContent = `please make sure your server has an ${config.warnRoleName} role.`;
         error();
     }
 

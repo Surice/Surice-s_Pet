@@ -133,7 +133,7 @@ module.exports = async (client, msg, content) => {
             error();
         }
     }else{
-        errContent = `please make sure your server has an Muted role.`;
+        errContent = `please make sure your server has an ${config.muteRoleName} role.`;
         error();
     }
 
