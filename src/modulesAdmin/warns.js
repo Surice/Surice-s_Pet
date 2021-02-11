@@ -10,6 +10,7 @@ module.exports = async (client, msg, content) => {
 
     if(content[1] == "rm"){
         let member = msg.mentions.members.first() || await msg.guild.members.fetch(content[2]);
+        let role = server.roles.cache.find(e => e.name == config.warnRoleName);
 
         if(member.id){
             var embed = new Discord.MessageEmbed()
@@ -26,6 +27,14 @@ module.exports = async (client, msg, content) => {
                         const num = content[3];
 
                         wSer[member.id].splice((num-1), 1);
+                    }
+
+                    if(wSer[member.id] && wSer[member.id].length == 0){
+                        delete wSer[member.id];
+
+                        if(member.roles.cache.has(role.id)){
+                            member.roles.remove(role);
+                        }
                     }
 
                     if(Object.keys(warns[server]).length == 0){
@@ -84,6 +93,10 @@ module.exports = async (client, msg, content) => {
             embed.addFields({name: `Warnings on ${server.name}`, value: out});
         }
         msg.channel.send(embed);
+    }
+
+    function checkWarnCount(){
+
     }
 
     function error(){
