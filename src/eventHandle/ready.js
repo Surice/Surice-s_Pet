@@ -8,5 +8,5 @@ module.exports = (client) => {
         ---------------------------
         `);
 
-    client.user.setActivity(`for Preifx: ${config.prefix}`, {type: "WATCHING"});
+    client.user.setActivity(`for Prefix: ${config.prefix}`, {type: "WATCHING"});
 }
