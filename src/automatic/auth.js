@@ -1,6 +1,8 @@
 const fs = require('fs');
 
 const config = JSON.parse(fs.readFileSync(`${__dirname}/../config.json`, 'utf-8'));
+
+const channels = JSON.parse(fs.readFileSync(`${__dirname}/../stor/channels.json`, 'utf-8'));
 let users = JSON.parse(fs.readFileSync(`${__dirname}/../stor/users.json`, 'utf-8'));
 
 //checks the access permission of the user
@@ -14,7 +16,7 @@ function authorized(msg){
     else if(msg.member.hasPermission('ADMINISTRATOR')){
         response.push("admin", "everyone");
     }
-    else if(channels[serverName].includes(msg.channel.id)){
+    else if(channels[serverName] && channels[serverName].includes(msg.channel.id)){
         response.push("everyone");
     }
 

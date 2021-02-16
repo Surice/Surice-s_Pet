@@ -49,6 +49,7 @@ module.exports = (client, msg) => {
                         msg.channel.send(`the entered command doesn't exist or you aren´t authorized to give me this order. Please try again or contact <@${config.owner}> in case of a mistake`);
                     }
                 }
+                                
             }else{
                 msg.channel.send(`you are trying to communicate with me in a channel which is not available for this service. Please try again or contact <@${config.owner}> in case of a mistake`);
             }
