@@ -32,7 +32,7 @@ module.exports = async (client, msg, content) => {
             });
         }else{
             if(msg.member.id == member.id){
-                errContent = "You cannot warn yourself";
+                errContent = "You cannot kick yourself";
                 error();
                 return;
             }
