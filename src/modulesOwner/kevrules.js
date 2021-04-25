@@ -89,7 +89,7 @@ module.exports = async (client, msg, content) => {
         ])
     ];
 
-    const channel = await client.channels.fetch((content[1] == "dev") ? "828333015892492329" : "835835660282626078")
+    const channel = await client.channels.fetch((content[1] == "dev") ? "828333015892492329" : "802227184356818965")
     
     channel.createWebhook('LPMitKev Regeln', {
         avatar: channel.guild.iconURL({dynamic: true}),
