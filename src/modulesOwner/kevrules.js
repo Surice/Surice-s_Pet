@@ -8,7 +8,7 @@ module.exports = async (client, msg, content) => {
     ,
         new MessageEmbed()
         .setColor('EB7B03')
-        .setDescription("```Wenn wir der Meinung sind, dass jemand diesen Discord Server zu einem weniger angenehmen Ort für andere macht, behalten wir uns das Recht vor den entsprechenden Nachrichten oder gegebenenfalls Accounts nach eigenem Ermessen zu verwarnen und sogar zu entfernen. Diese ganzen Regeln existieren nicht, um euch zu nerven, sondern dafür, dass ihr hier eine großartige Zeit verbringen könnt und Momente erlebt, an die ihr euch gerne zurückerinnert. Wir lieben Diskussionen, aber diese sollten stehts offen und mit Bedacht geführt werden. Leider sind dabei Regeln nötig, die dafür sorgen, dass die Diskussionen auf dem Server im zivilisierten Rahmen bleiben und nicht ausarten``` \n\n")
+        .setDescription("```Wenn wir der Meinung sind, dass jemand diesen Discord Server zu einem weniger angenehmen Ort für andere macht, behalten wir uns das Recht vor den entsprechenden Nachrichten oder gegebenenfalls Accounts nach eigenem Ermessen zu verwarnen und sogar zu entfernen. Diese ganzen Regeln existieren nicht, um euch zu nerven, sondern dafür, dass ihr hier eine großartige Zeit verbringen könnt und Momente erlebt, an die ihr euch gerne zurückerinnert. Wir lieben Diskussionen, aber diese sollten stehts offen und mit Bedacht geführt werden. Leider sind dabei Regeln nötig, die dafür sorgen, dass die Diskussionen auf dem Server im zivilisierten Rahmen bleiben und nicht ausarten:``` \n\n")
         .addFields([
             {
                 name: "**1. __ALLGEMEINE REGELN__**",
@@ -16,7 +16,7 @@ module.exports = async (client, msg, content) => {
                     > − Die [Discord-Nutzungsbedingungen](https://discord.com/terms) und [Community-Richtlinien](https://discord.com/guidelines) werden strikt eingehalten
                     > − Die [Public Server Guidelines](https://support.discord.com/hc/de/articles/360035969312) werden strikt eingehalten
                     > − Das geltende deutsche Recht wird befolgt
-                    > − Ausnahmen werden nur durch die Teamleitung durchgeführt
+                    > − Ausnahmen werden nur durch die Teamleitung erteilt
                     \u200b
                 `
             },{
